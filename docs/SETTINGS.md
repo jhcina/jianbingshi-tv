@@ -1,3 +1,5 @@
+> 本文保留归藏上游说明。煎饼使 TV 分支的公开包名是 `io.github.jhcina.yitv`，版本、照片导入和实测范围以 [分支 README](../README.md)、[照片指南](PHOTOS.md)、[兼容记录](YI-COMPATIBILITY.md) 为准。下文上游包名、下载地址及其验证记录不能直接当作本分支结果；不要照抄上游包名设置开机或 Home。
+
 # 统一设置（v0.3.0）
 
 此页对应 [v0.3.0 正式安装包](https://github.com/op7418/guizang-tv/releases/tag/v0.3.0)。从官方 v0.2.0 覆盖安装可保留原有偏好；首次使用仍默认为照片背景、纵向文字列表和每 5 分钟轮播。

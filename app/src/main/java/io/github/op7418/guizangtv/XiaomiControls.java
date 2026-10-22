@@ -13,12 +13,13 @@ final class XiaomiControls {
     private XiaomiControls() { }
 
     static boolean enabled() {
-        return "MiTV-MTSU0".equals(Build.MODEL);
+        return "MiTV-MTSU0".equals(Build.MODEL) || XiaomiProfile.mftr0(Build.MODEL, Build.VERSION.INCREMENTAL);
     }
 
     /** Observed on this firmware: source 23 = HDMI 1, source 24 = HDMI 2. */
     static boolean openHdmi(Context context, int port) {
-        if (!enabled() || port < 1 || port > 2) return false;
+        int source = XiaomiProfile.hdmiSource(Build.MODEL, Build.VERSION.INCREMENTAL, port);
+        if (source < 0) return false;
         ComponentName target = new ComponentName("com.xiaomi.mitv.tvplayer",
                 "com.xiaomi.mitv.tvplayer.ExternalSourceActivity");
         try {
@@ -28,7 +29,7 @@ final class XiaomiControls {
                     && context.checkSelfPermission(info.permission) != PackageManager.PERMISSION_GRANTED)
                 return false;
             context.startActivity(new Intent("com.xiaomi.mitv.tvplayer.EXTSRC_PLAY")
-                    .setComponent(target).putExtra("input", 22 + port)
+                    .setComponent(target).putExtra("input", source)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             return true;
         } catch (PackageManager.NameNotFoundException | RuntimeException unavailable) {

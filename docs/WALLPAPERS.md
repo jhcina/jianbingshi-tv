@@ -1,3 +1,5 @@
+> 本文保留归藏上游说明。煎饼使 TV 分支的公开包名是 `io.github.jhcina.yitv`，版本、照片导入和实测范围以 [分支 README](../README.md)、[照片指南](PHOTOS.md)、[兼容记录](YI-COMPATIBILITY.md) 为准。下文上游包名、下载地址及其验证记录不能直接当作本分支结果；不要照抄上游包名设置开机或 Home。
+
 # 内置壁纸与许可
 
 仅打包用户在 2026-10-20 截图中选中的五张 Unsplash 照片。逐张原页面已核对作者与「Free to use under the Unsplash License」标记；没有包含其余 Wallhaven 图片。

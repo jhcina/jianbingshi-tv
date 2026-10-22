@@ -32,7 +32,12 @@ import java.util.concurrent.Executors;
 final class FrameWallpapers {
     private static final class Entry {
         final String id, name, file, thumb;
+        final boolean privateImage;
         Entry(JSONObject json) throws org.json.JSONException {
+            this(json,false);
+        }
+        Entry(JSONObject json,boolean personal) throws org.json.JSONException {
+            privateImage=personal;
             id = json.getString("id"); name = json.getString("name");
             file = json.getString("file"); thumb = json.getString("thumb");
         }
@@ -46,7 +51,11 @@ final class FrameWallpapers {
     private boolean rotating, active, loading, destroyed, hasImage;
     private int current, minutes, generation;
     Runnable changed=()->{};
-    private final Runnable rotate = () -> load(WallpaperCycle.next(current, entries.size()));
+    private final Runnable rotate = () -> {
+        boolean[] personal=new boolean[entries.size()];
+        for(int i=0;i<entries.size();i++)personal[i]=entries.get(i).privateImage;
+        load(WallpaperPrivacy.next(current,personal));
+    };
 
     FrameWallpapers(Activity activity, ImageView photo, ImageView transition) {
         this.activity = activity; this.photo = photo; this.transition = transition;
@@ -64,6 +73,7 @@ final class FrameWallpapers {
         } catch (Exception error) {
             android.util.Log.e("TvHome.Wallpaper", "Catalog unavailable", error);
         }
+        appendPrivateCatalog();
         String id = prefs.getString("selected", "");
         for (int i = 0; i < entries.size(); i++) if (entries.get(i).id.equals(id)) current = i;
         if (entries.isEmpty()) {
@@ -81,10 +91,51 @@ final class FrameWallpapers {
     }
 
     private InputStream openCatalog() throws java.io.IOException {
-        try { return activity.getAssets().open("wallpapers/local/catalog.json"); }
-        catch (java.io.FileNotFoundException absent) {
-            return activity.getAssets().open("wallpapers/catalog.json");
-        }
+        return activity.getAssets().open("wallpapers/catalog.json");
+    }
+
+    private java.io.File privateFolder(){
+        java.io.File root=activity.getExternalFilesDir(null);
+        return root==null?null:new java.io.File(root,"my-wallpapers");
+    }
+
+    private void appendPrivateCatalog(){
+        // Kept separately from the public assets, including during rotation.
+        java.io.File folder=privateFolder();
+        if(folder==null)return;
+        java.io.File catalog=new java.io.File(folder,"catalog.json");
+        if(!catalog.isFile()||catalog.length()>65536)return;
+        try(InputStream stream=new java.io.FileInputStream(catalog)){
+            java.io.ByteArrayOutputStream bytes=new java.io.ByteArrayOutputStream();
+            byte[] buffer=new byte[4096];int n;while((n=stream.read(buffer))!=-1)bytes.write(buffer,0,n);
+            JSONArray json=new JSONArray(bytes.toString("UTF-8"));
+            if(json.length()>30)throw new java.io.IOException("Too many local wallpapers");
+            for(int i=0;i<json.length();i++){
+                JSONObject item=json.getJSONObject(i);
+                String file=item.getString("file"),thumb=item.getString("thumb");
+                java.io.File image=WallpaperPrivacy.resolve(folder,file),preview=WallpaperPrivacy.resolve(folder,thumb);
+                if(!image.isFile()||!preview.isFile()||image.length()>8_000_000||preview.length()>1_000_000)continue;
+                entries.add(new Entry(new JSONObject().put("id","private-"+file).put("name",item.getString("name"))
+                        .put("file","private:"+file).put("thumb","private:"+thumb),true));
+            }
+        }catch(Exception error){android.util.Log.w("TvHome.Wallpaper","Local wallpaper catalog unavailable",error);}
+    }
+
+    void reloadPrivate() {
+        String selectedId = entries.get(current).id;
+        cancelPreview(); cancelSelection();
+        entries.removeIf(entry -> entry.privateImage);
+        appendPrivateCatalog();
+        current = 0;
+        for (int i=0;i<entries.size();i++) if(entries.get(i).id.equals(selectedId)) current=i;
+        schedule();
+    }
+
+    void step(int direction) {
+        if (loading || entries.isEmpty()) return;
+        boolean[] personal = new boolean[entries.size()];
+        for(int i=0;i<entries.size();i++)personal[i]=entries.get(i).privateImage;
+        load(PhotoLayout.next(current, personal, direction));
     }
 
     private Bitmap decode(String file, boolean thumbnail) throws Exception {
@@ -101,7 +152,9 @@ final class FrameWallpapers {
             canvas.drawRect(0, 0, image.getWidth(), image.getHeight(), paint);
             return image;
         }
-        try (InputStream stream = activity.getAssets().open("wallpapers/" + file)) {
+        try (InputStream stream = file.startsWith("private:")
+                ? new java.io.FileInputStream(WallpaperPrivacy.resolve(privateFolder(),file.substring(8)))
+                : activity.getAssets().open("wallpapers/" + file)) {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
             Bitmap image = BitmapFactory.decodeStream(stream, null, options);
@@ -191,6 +244,7 @@ final class FrameWallpapers {
     int count() { return entries.size(); }
     int selected() { return current; }
     String name(int index) { return entries.get(index).name; }
+    boolean privateImage(int index){return entries.get(index).privateImage;}
     boolean rotating() { return rotating; }
     int minutes() { return minutes; }
     void select(int index, Runnable success) { load(index, success); }

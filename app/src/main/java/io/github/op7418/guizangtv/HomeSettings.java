@@ -38,6 +38,7 @@ final class HomeSettings {
     HomeSettings(FrameHomeActivity activity){a=activity;}
     boolean showing(){return dialog!=null&&dialog.isShowing();}
     String page(){return showing()?page:"closed";}
+    void imported(){if(showing()){page="private-wallpaper";render();}}
     void time(String time){if(preview!=null)preview.clock.setText(time);}
     void weatherChanged(){if(preview!=null)preview.weather(a.weather.current());if(showing()&&page.equals("weather")&&status!=null)status.setText(a.weather.city()+" · "+a.weather.status());}
     void show(){
@@ -58,11 +59,11 @@ final class HomeSettings {
     private void back(){
         a.wallpapers.cancelPreview();a.wallpapers.cancelSelection();
         if(page.equals("overview")){close();return;}
-        go(page.equals("city")?"weather":page.equals("wallpaper")||page.equals("rotation")?"background":page.startsWith("item:")||page.equals("add")?"home":"overview");
+        go(page.equals("city")?"weather":page.equals("wallpaper")||page.equals("private-wallpaper")||page.equals("rotation")?"background":page.startsWith("item:")||page.equals("add")?"home":"overview");
     }
     private void go(String next){cityRequest++;searching=false;a.wallpapers.cancelPreview();a.wallpapers.cancelSelection();page=next;render();}
     private String title(){
-        switch(page){case "overview":return "设置";case "background":return "背景";case "wallpaper":return "壁纸";case "rotation":return "轮播";
+        switch(page){case "overview":return "设置";case "background":return "背景";case "wallpaper":return "默认壁纸";case "private-wallpaper":return "我的壁纸 · 仅本机";case "rotation":return "轮播";
             case "weather":return "时间与天气";case "city":return "选择城市";case "layout":return "布局";case "type":return "字体";case "focus":return "选中样式";case "home":return "首页内容";case "add":return "首页内容 / 添加";case "tv":return "电视与启动";case "experiments":return "实验性功能";
             default:return "首页内容 / "+a.items.name(page.substring(5));}
     }
@@ -72,7 +73,7 @@ final class HomeSettings {
         LinearLayout panel=new LinearLayout(a);panel.setOrientation(LinearLayout.VERTICAL);
         panel.setPadding(a.dp(70),a.dp(overview?42:24),a.dp(70),a.dp(30));
         if(!overview){
-            TextView back=label("‹  "+(page.equals("wallpaper")||page.equals("rotation")?"背景":"设置"),14);
+            TextView back=label("‹  "+(page.equals("wallpaper")||page.equals("private-wallpaper")||page.equals("rotation")?"背景":"设置"),14);
             back.setTextColor(0xBBFFFFFF);back.setFocusable(true);back.setOnClickListener(v->back());
             back.setPadding(a.dp(8),0,a.dp(10),0);
             back.setOnFocusChangeListener((v,f)->decorate(v,f));
@@ -98,12 +99,13 @@ final class HomeSettings {
         panel.addView(footer,new LinearLayout.LayoutParams(-1,a.dp(26)));
         switch(page){
             case "overview":
+                entry("看照片", "收起首页文字 · 左右换图 · 返回退出",a::showPhotoMode);
                 entry("背景", "壁纸、轮播与纯色",()->go("background"));entry("布局","列表、Dock、图标与文字",()->go("layout"));
                 entry("字体","字形与字号",()->go("type"));entry("选中样式","文字高亮与毛玻璃",()->go("focus"));
                 entry("时间与天气","城市、温度与天气显示",()->go("weather"));entry("首页内容","添加、排序、隐藏",()->go("home"));entry("电视与启动","自动进入与小米系统",()->go("tv"));entry("实验性功能","Codex 对话 · 默认关闭",()->go("experiments"));break;
             case "background":
                 row("背景","background",new String[]{"照片","浅色","深色"});
-                if(a.appearance.get("background")==0){entry("壁纸",a.wallpapers.name(a.wallpapers.selected()),()->go("wallpaper"));entry("轮播",a.wallpapers.rotating()?"每 "+a.wallpapers.minutes()+" 分钟":"固定壁纸",()->go("rotation"));}
+                if(a.appearance.get("background")==0){entry("默认壁纸","风景、空景与内置照片",()->go("wallpaper"));entry("我的壁纸","仅保存在这台电视",()->go("private-wallpaper"));entry("轮播",a.wallpapers.rotating()?"每 "+a.wallpapers.minutes()+" 分钟":"固定壁纸",()->go("rotation"));}
                 else note("切换回照片背景后，可选择壁纸和轮播。原来的照片与轮播偏好会保留。");break;
             case "layout":
                 row("首页布局","layout",new String[]{"纵向列表","横向 Dock"});row("应用显示","apps",new String[]{"文字","图标","图标＋文字"});row("右侧操作","controls",new String[]{"文字","图标","图标＋文字"});
@@ -119,7 +121,8 @@ final class HomeSettings {
                 for(int m:WallpaperCycle.MINUTES){final int value=m;option("每 "+m+" 分钟",a.wallpapers.rotating()&&a.wallpapers.minutes()==m,()->{
                     if(a.wallpapers.rotation(true,value))render();else failed();});}
                 note("只在照片首页显示时计时；设置页、其他应用和纯色背景会暂停轮播。选择壁纸不会改变轮播模式。");break;
-            case "wallpaper":gallery();break;
+            case "wallpaper":gallery(false);break;
+            case "private-wallpaper":gallery(true);break;
             case "home":
                 note("保留 1–9 个入口。选择一项可调整位置或从首页隐藏。");
                 for(int i=0;i<a.items.order.size();i++){String id=a.items.order.get(i);entry((i+1)+"  "+a.items.name(id),id.startsWith("hdmi:")?"HDMI "+id.substring(5):"应用",()->go("item:"+id));}
@@ -150,6 +153,8 @@ final class HomeSettings {
                 note("当前支持文字对话；语音输入取决于系统输入法。尚未接入日程、米家或电脑控制。");
                 note("关闭后隐藏入口并停止电视端连接，保留配对。已发送的回答可能继续在电脑完成；完全停用请在电脑停止连接服务。");break;
             case "tv":
+                entry("Home 键返回新桌面",HomeReturnService.enabled(a)?"已开启；点击查看或关闭":"未开启；点击打开辅助功能",()->HomeReturnService.openSettings(a));
+                if(HomeReturnService.enabled(a))entry("关闭 Home 自动返回","按 Home 恢复进入小米原桌面",()->{HomeReturnService.disable(a);a.message("已关闭 Home 自动返回");render();});
                 entry("开机自动进入",BootStart.enabled(a)?"已开启":"已关闭",()->BootStart.show(a));entry("电视系统设置","网络、声音、画面等",a::systemSettings);entry("小米原桌面","打开原来的电视首页",a::stockHome);break;
             default:
                 String id=page.substring(5);int pos=a.items.order.indexOf(id);
@@ -171,8 +176,12 @@ final class HomeSettings {
         searching=true;cityError="";cityResults.clear();int request=++cityRequest;render();
         a.weather.search(cityQuery,(cities,error)->{if(request!=cityRequest||!showing()||!page.equals("city"))return;searching=false;cityResults=cities;cityError=error;render();});
     }
-    private void gallery(){
+    private void gallery(boolean personal){
+        int imageCount=0;
+        if(personal)entry("导入照片","从 U 盘或本机选择 · 仅存本机",a::importPhoto);
         for(int i=0;i<a.wallpapers.count();i++){
+            if(a.wallpapers.privateImage(i)!=personal)continue;
+            imageCount++;
             final int index=i;
             TextView v=button(a.wallpapers.name(i),()->{
                 if(index==a.wallpapers.selected()){status.setText("已应用这张壁纸");return;}
@@ -192,7 +201,7 @@ final class HomeSettings {
             });
             options.addView(v,new LinearLayout.LayoutParams(-1,a.dp(46)));
         }
-        note("上下浏览预览，按确定设为壁纸。");
+        note(imageCount==0?"这台电视还没有添加私有壁纸。最多 30 张；导入不会自动设为壁纸。":"上下浏览预览，按确定应用。默认图库与我的壁纸各自轮播。");
     }
     private void row(String title,String key,String[] labels){
         heading(title);
@@ -234,7 +243,7 @@ final class HomeSettings {
     }
     private void decorate(View view,boolean focus){
         TextView v=(TextView)view;
-        v.setBackground(WallpaperMaterial.rounded(focus?0xF5F5F4EF:0x00000000,a.dp(10)));
+        v.setBackground(focus?new FocusPaper(a.getResources().getDisplayMetrics().density):WallpaperMaterial.rounded(0x00000000,a.dp(10)));
         v.setTextColor(focus?0xFF202321:0xEBFFFFFF);
         String value=v.getText().toString();int line=value.indexOf('\n');
         if(line>=0){SpannableString text=new SpannableString(value);

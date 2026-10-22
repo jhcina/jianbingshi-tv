@@ -1,5 +1,44 @@
 [
   {
+    "id": "yi-landscape-01",
+    "name": "蓝调海湾",
+    "file": "public-defaults/landscape_01.jpg",
+    "thumb": "public-defaults/landscape_01_thumb.jpg",
+    "source": "user-provided",
+    "processing": "non-generative",
+    "photographer": "煎饼使",
+    "license": "Yi TV wallpaper redistribution permission",
+    "license_file": "public-defaults/NOTICE.md",
+    "sha256": "fdd0a522820ac77a22c0b1cc20ef3d5b9dc3caea1d260a894f6a29309da10053",
+    "thumb_sha256": "325a98d58d6006146a0d68e1eb85f33a9a3d5a1d7ee844e9935db388268a23e3"
+  },
+  {
+    "id": "yi-landscape-02",
+    "name": "晨光海岸",
+    "file": "public-defaults/landscape_02.jpg",
+    "thumb": "public-defaults/landscape_02_thumb.jpg",
+    "source": "user-provided",
+    "processing": "non-generative",
+    "photographer": "煎饼使",
+    "license": "Yi TV wallpaper redistribution permission",
+    "license_file": "public-defaults/NOTICE.md",
+    "sha256": "cca34f3bbf03f6e6ede81071643fa646cbd0e7f8f12dee07780a534ca377ccc8",
+    "thumb_sha256": "96fa13f26008a0e9b68e80eea1d2e93bde00a0a83c6ee5b7d3db0e5d0454cec3"
+  },
+  {
+    "id": "yi-landscape-03",
+    "name": "山海弯道",
+    "file": "public-defaults/landscape_03.jpg",
+    "thumb": "public-defaults/landscape_03_thumb.jpg",
+    "source": "user-provided",
+    "processing": "non-generative",
+    "photographer": "煎饼使",
+    "license": "Yi TV wallpaper redistribution permission",
+    "license_file": "public-defaults/NOTICE.md",
+    "sha256": "5e83c7a56382c6173329eadab7619f7631e58654174ebf1be6daae1157db88f1",
+    "thumb_sha256": "ae84b50142e241f40a15cf18d7aba32e55ae1d04ae35017daa4b5a211fe4e4be"
+  },
+  {
     "id": "unsplash-rSYsP5TlEAk",
     "name": "雾中雪岭",
     "file": "bundled/rSYsP5TlEAk.jpg",

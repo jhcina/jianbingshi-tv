@@ -8,14 +8,14 @@ import java.util.*;
 
 /** Stable app/source identities; removing an entry never uninstalls an app. */
 final class HomeItems {
-    static final String[] DEFAULTS = {"hdmi:2", "hdmi:1", "com.xiaodianshi.tv.yst",
-            "com.xiaomi.mitv.smartshare", "com.mitv.gallery", "com.mitv.tvhome"};
+    static final String[] DEFAULTS = {"com.xiaodianshi.tv.yst", "com.ktcp.video",
+            "com.zentraedi.zspace.tv", "com.xiaomi.mitv.mediaexplorer"};
     final Context context;
     final LinkedHashMap<String,String> names = new LinkedHashMap<>();
     final List<String> order = new ArrayList<>();
     HomeItems(Context c) {
         context = c;
-        String[] labels = {"PlayStation 5", "Apple TV", "哔哩哔哩", "小米投屏", "相册", "小米原桌面"};
+        String[] labels = {"哔哩哔哩", "腾讯视频", "极空间", "文件管理"};
         for (int i=0;i<DEFAULTS.length;i++) names.put(DEFAULTS[i], labels[i]);
         discover();
         try {
@@ -25,9 +25,27 @@ final class HomeItems {
                 if (validId(id) && !order.contains(id)) order.add(id);
             }
         } catch (Exception ignored) { order.clear(); }
-        if (order.isEmpty()) order.addAll(Arrays.asList(DEFAULTS));
+        if (order.isEmpty()) {
+            for(String id:DEFAULTS)if(available(id))order.add(id);
+            List<String> installed=new ArrayList<>(names.keySet());
+            installed.sort(java.text.Collator.getInstance(Locale.CHINA));
+            for(String id:installed)if(order.size()<4&&!order.contains(id)&&available(id))order.add(id);
+            if(order.isEmpty()){names.put("com.android.settings","电视设置");order.add("com.android.settings");}
+        }
+    }
+    private boolean available(String id) {
+        if(id.startsWith("hdmi:"))return false;
+        if(id.equals("com.xiaomi.mitv.mediaexplorer"))return context.getPackageManager().resolveActivity(
+                new Intent("duokan.mediaexplorer.intent.action.BROWSE_DEVICE_LIST").setPackage(id),0)!=null;
+        return context.getPackageManager().getLeanbackLaunchIntentForPackage(id)!=null
+                ||context.getPackageManager().getLaunchIntentForPackage(id)!=null;
     }
     void discover() {
+        if (XiaomiControls.enabled()) {
+            names.put("hdmi:1", "HDMI 1"); names.put("hdmi:2", "HDMI 2");
+            if (XiaomiProfile.mftr0(android.os.Build.MODEL, android.os.Build.VERSION.INCREMENTAL)) names.put("hdmi:3", "HDMI 3");
+            names.put("com.xiaomi.mitv.mediaexplorer", "文件管理");
+        }
         for (String category : new String[]{Intent.CATEGORY_LEANBACK_LAUNCHER, Intent.CATEGORY_LAUNCHER}) {
             for (ResolveInfo r : context.getPackageManager().queryIntentActivities(new Intent(Intent.ACTION_MAIN).addCategory(category), 0)) {
                 String id = r.activityInfo.packageName;
@@ -37,7 +55,7 @@ final class HomeItems {
         }
     }
     String name(String id) { return names.getOrDefault(id, context.getSharedPreferences("home-items",0).getString("name:"+id,id)); }
-    static boolean validId(String id) { return id.equals("hdmi:1") || id.equals("hdmi:2") || id.matches("[a-zA-Z][a-zA-Z0-9_]*(\\.[a-zA-Z0-9_]+)+"); }
+    static boolean validId(String id) { return id.equals("hdmi:1") || id.equals("hdmi:2") || id.equals("hdmi:3") || id.matches("[a-zA-Z][a-zA-Z0-9_]*(\\.[a-zA-Z0-9_]+)+"); }
     boolean save(List<String> next) {
         if (next.isEmpty() || next.size()>9 || new HashSet<>(next).size()!=next.size()) return false;
         for(String id : next) if(!validId(id)) return false;

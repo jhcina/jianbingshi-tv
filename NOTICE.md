@@ -1,3 +1,15 @@
+# 煎饼使 TV 分支说明
+
+直接衍生自 [op7418/guizang-tv](https://github.com/op7418/guizang-tv)，基线 `312c01119a327f402e68818670a6542f1e643e56`。保留上游 Git 历史、版权与所有以下通知。本分支为独立的家庭照片桌面试验，不代表归藏或小米官方。
+
+本分支新增：本机照片导入与公开/私有图库分离、看照片模式、完整画面留边处理、黄色纸片焦点与新图标、首次入口发现及 MFTR0 指定固件适配。界面设置、Dock、预览、天气与 Codex 等基础来自归藏，不作为本分支独创宣传。
+
+本机照片方向识别使用 AndroidX ExifInterface 1.4.2（Android Open Source Project，Apache License 2.0），未修改库源码。完整许可随 APK 保存于 `assets/licenses/ANDROIDX-APACHE-2.0.txt`，来源：https://developer.android.com/jetpack/androidx/releases/exifinterface 。AndroidX 的传递注解依赖按其 Apache 2.0 许可使用；JSpecify 1.0.0、Kotlin 标准库 1.7.10 及 JetBrains annotations 13.0 均按各自 Apache 2.0 许可使用；AndroidX annotation 1.8.1 是本库的传递依赖。
+
+三张航拍作者为煎饼使，许可见 `app/src/main/assets/wallpapers/public-defaults/NOTICE.md`；它们与五张 Unsplash 照片均不适用代码 MIT。人物、私人截图与 AI 重建室内图不分发。
+
+---
+
 # 来源与许可
 
 - 初始工程参考与衍生基础：Gathin23/cleanyourtv，MIT License。

@@ -124,9 +124,17 @@ final class HomeSurface extends FrameLayout {
     }
     void focusApp(){apps.get(selected).requestFocus();}
     private void paint(View v,TextView label,boolean focused,boolean iconsOnly){
-        v.setAlpha(focused?1f:style.faded());label.setVisibility(iconsOnly&&!focused&&style.get("layout")==0?GONE:VISIBLE);
+        float alpha=focused?1f:style.faded();v.animate().cancel();
+        if(!preview&&v.isAttachedToWindow()&&android.animation.ValueAnimator.areAnimatorsEnabled())v.animate().alpha(alpha).setDuration(150).start();else v.setAlpha(alpha);
+        label.setVisibility(iconsOnly&&!focused&&style.get("layout")==0?GONE:VISIBLE);
+        boolean action=controls.contains(v)&&focused;
+        int ink=action?0xFF262A24:focused?0xFFFFCB22:style.ink();label.setTextColor(ink);
+        if(v instanceof ViewGroup)for(int i=0;i<((ViewGroup)v).getChildCount();i++){
+            View child=((ViewGroup)v).getChildAt(i);if(child instanceof ImageView)((ImageView)child).setColorFilter(ink);
+        }
         if(iconsOnly&&style.get("layout")==1)label.setAlpha(focused?1:0);
-        if(dockShelf!=null&&apps.contains(v)){
+        if(action){v.setBackground(new FocusPaper(getResources().getDisplayMetrics().density));}
+        else if(dockShelf!=null&&apps.contains(v)){
             v.setBackground(WallpaperMaterial.rounded(focused&&style.get("focus")==1?(style.light()?0x20000000:0x26FFFFFF):Color.TRANSPARENT,dp(14)));
         }else if(style.get("focus")==1&&focused){
             int veil=style.light()?0x2AFFFFFF:new int[]{0x60101418,0x48101418,0x30101418}[style.get("material")];
@@ -140,7 +148,7 @@ final class HomeSurface extends FrameLayout {
             if(request!=materialRequest)return;material=field;paintShelf();
             for(View v:apps)if(dockShelf==null&&(v.isFocused()||(preview&&apps.indexOf(v)==selected)))
                 v.setBackground(new WallpaperMaterial.Glass(this,v,material,dp(12),new int[]{0x60101418,0x48101418,0x30101418}[style.get("material")]));
-            for(View v:controls)if(v.isFocused())v.setBackground(new WallpaperMaterial.Glass(this,v,material,dp(12),0x50101418));
+            for(View v:controls)if(v.isFocused())v.setBackground(new FocusPaper(getResources().getDisplayMetrics().density));
         });
     }
     private void paintShelf(){

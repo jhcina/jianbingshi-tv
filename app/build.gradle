@@ -4,11 +4,11 @@ android {
     namespace 'io.github.op7418.guizangtv'
     compileSdk 34
     defaultConfig {
-        applicationId 'io.github.op7418.guizangtv'
+        applicationId providers.gradleProperty('yiApplicationId').getOrElse('io.github.jhcina.yitv')
         minSdk 26
         targetSdk 34
-        versionCode 6
-        versionName '0.4.0-dev'
+        versionCode 8
+        versionName '0.5.0-yi.preview.1'
     }
     signingConfigs {
         release {
@@ -33,4 +33,37 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 }
-dependencies { testImplementation 'junit:junit:4.13.2' }
+dependencies {
+    implementation 'androidx.exifinterface:exifinterface:1.4.2'
+    testImplementation 'junit:junit:4.13.2'
+}
+
+// This public APK may only contain the explicitly catalogued default pictures.
+// Personal photos are runtime imports in the app's scoped data directory.
+tasks.register('checkPublicWallpapers') {
+    doLast {
+        def root=file('src/main/assets/wallpapers')
+        def rows=new groovy.json.JsonSlurper().parse(new File(root,'catalog.json'))
+        if(rows.size()>15)throw new GradleException('Too many public wallpaper assets')
+        def allowed=[] as Set
+        rows.each { row ->
+            ['file','thumb'].each { key ->
+                def name=row[key]?.toString()
+                if(!name||name.contains('..')||name.startsWith('/')||name.toLowerCase().matches('.*(private|my-wallpapers|local/).*'))
+                    throw new GradleException('Private or invalid image in public catalog')
+                allowed.add(name)
+                if(!new File(root,name).isFile())throw new GradleException('Missing public wallpaper: '+name)
+                def expected=row[key=='file'?'sha256':'thumb_sha256']
+                def digest=java.security.MessageDigest.getInstance('SHA-256').digest(new File(root,name).bytes).encodeHex().toString()
+                if(!expected||digest!=expected)throw new GradleException('Wallpaper differs from reviewed source: '+name)
+            }
+        }
+        fileTree('src/main/assets').files.each { entry ->
+            if(entry.name.toLowerCase().matches('.*\\.(jpg|jpeg|png|webp)')) {
+                def relative=root.toPath().relativize(entry.toPath()).toString().replace('\\','/')
+                if(!allowed.contains(relative))throw new GradleException('Uncatalogued media refused in public APK: '+relative)
+            }
+        }
+    }
+}
+tasks.named('preBuild').configure { dependsOn 'checkPublicWallpapers' }
