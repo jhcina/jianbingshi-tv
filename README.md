@@ -4,7 +4,7 @@
 
 **[下载预览版](https://github.com/jhcina/yi-tv/releases) · [照片导入](docs/PHOTOS.md) · [兼容与恢复](docs/YI-COMPATIBILITY.md) · [来源与许可](NOTICE.md)**
 
-当前为 **0.5.0-yi.preview.1**，适合愿意反馈的用户。它是 Android 电视桌面 App；安装不会刷写电视固件，也不会删除原桌面。
+当前为 **0.5.0-yi.preview.1**，适合愿意反馈的用户。**已知限制：MFTR0 本次待机后检查发现辅助功能列表为空，原因待查；Home 持久性尚未验证，建议先作为普通 App 试用。**它是 Android 电视桌面 App；安装不会刷写电视固件，也不会删除原桌面。
 
 ![MFTR0 实机桌面截图](docs/screenshots/home.png)
 

@@ -17,3 +17,5 @@
 代码 MIT，保留全部来源通知。默认八张照片中三张航拍署名煎饼使、五张沿用 Unsplash 许可；照片不适用代码 MIT。人物照片、个人日志、签名密钥、AI 重建室内图不包含在公开源码或 APK 中。
 
 使用前请看 [兼容与恢复](https://github.com/jhcina/yi-tv/blob/main/docs/YI-COMPATIBILITY.md) 和 [照片导入](https://github.com/jhcina/yi-tv/blob/main/docs/PHOTOS.md)。Home 自动返回默认关闭，启用须设备本人授权；基础使用不需要辅助功能。
+
+**发布后补充（2026-10-23）：** 本次 MFTR0 待机状态检查中，辅助功能启用列表曾为空，清空原因未确定。Home 返回不承诺待机/重启后保持；建议先作为普通 App 试用。详细记录见 main 分支兼容说明。此为新增实机观察，未改变本版本 APK。
