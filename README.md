@@ -2,9 +2,9 @@
 
 把电视首页留给常用应用和自己的照片。以 [op7418/guizang-tv](https://github.com/op7418/guizang-tv) 为底座的家庭照片桌面分支，保留归藏的大字、壁纸预览和遥控器交互，新增本机相册与看照片模式。
 
-**[下载已验证预览 APK](https://github.com/jhcina/jianbingshi-tv/releases/download/v0.5.0-preview.2/jianbingshi-tv-0.5.0-preview.2.apk) · [小白安装指南](docs/GETTING-STARTED.md) · [照片导入](docs/PHOTOS.md) · [兼容与恢复](docs/YI-COMPATIBILITY.md) · [来源与许可](NOTICE.md)**
+**[下载已验证预览 APK](https://github.com/jhcina/jianbingshi-tv/releases/download/v0.5.0-preview.3/jianbingshi-tv-0.5.0-preview.3.apk) · [小白安装指南](docs/GETTING-STARTED.md) · [照片导入](docs/PHOTOS.md) · [兼容与恢复](docs/YI-COMPATIBILITY.md) · [来源与许可](NOTICE.md)**
 
-推荐下载为 **0.5.0-preview.2，尚非正式稳定版**；main 正在开发 0.5.0-preview.3（尚未发布），适合愿意反馈的用户。**已知限制：MFTR0 本次待机后检查发现辅助功能列表为空，原因待查；Home 持久性尚未验证，建议先作为普通 App 试用。**它是 Android 电视桌面 App；安装不会刷写电视固件，也不会删除原桌面。
+当前为 **0.5.0-preview.3，尚非正式稳定版**，适合愿意反馈的用户。**已知限制：MFTR0 本次待机后检查发现辅助功能列表为空，原因待查；Home 持久性尚未验证，建议先作为普通 App 试用。**它是 Android 电视桌面 App；安装不会刷写电视固件，也不会删除原桌面。
 
 ![MFTR0 实机桌面截图](docs/screenshots/home.png)
 
@@ -28,16 +28,16 @@
 Android 8.0 / API 26 起可安装，其他电视仍须实测。下载签名预览 APK，通过电视支持的方式安装；已启用 ADB 的用户可执行：
 
 ```sh
-adb -s <电视设备标识> install -r jianbingshi-tv-0.5.0-preview.2.apk
+adb -s <电视设备标识> install -r jianbingshi-tv-0.5.0-preview.3.apk
 ```
 
 打开“煎饼使TV”。初次使用不要求开启无障碍或修改默认桌面。公开包名 `io.github.jhcina.yitv`，与归藏原版及此前私人试用包分开，设置和私人照片不会自动迁移。预览版后续更新需使用同一签名；自行构建的 Debug 包不保证能覆盖公开包，勿为解决签名冲突直接卸载有数据的版本。
 
 - 返回键：关闭面板或回到应用列表；在首页不退出，也不暂停 Home 返回。只有从设置明确打开“小米原桌面”才暂停，重开本桌面恢复。
-- 设置 → 首页内容：添加、排序、隐藏；隐藏不会卸载应用。
-- 设置 → 背景 → 我的壁纸 → 导入照片：使用电视的系统文件选择器。
+- 设置 → 常用应用：添加、排序、隐藏；隐藏不会卸载应用。
+- 设置 → 照片与背景 → 我的壁纸 → 导入照片：使用电视的系统文件选择器。
 - 设置 → 看照片：收起文字，左右换图，确定或返回退出；有菜单键的遥控器也可从首页按菜单进入。
-- 设置 → 背景 → 默认壁纸：分享桌面截图前请在这里选择公开照片，并关闭可能含私人信息的天气/Codex 浮层；“我的壁纸”不是加密相册。
+- 设置 → 照片与背景 → 默认壁纸：分享桌面截图前请在这里选择公开照片，并关闭可能含私人信息的天气/Codex 浮层；“我的壁纸”不是加密相册。
 - 设置 → 电视与启动：查看原桌面与 Home 设置。Home 返回服务默认关闭，只在已适配的小米固件上工作，须本人从系统设置开启；不读取屏幕节点、不过滤遥控器按键。
 
 天气与 Codex 延续上游，默认关闭；基础桌面及本机照片不要求账号。实验功能的上游说明见 [原版 README 存档](docs/UPSTREAM-README.md)，其中下载链接、包名和验证结果属于上游，不代表本 fork 的测试结果。
@@ -56,7 +56,7 @@ python -m unittest discover -s scripts -p 'test_*.py'
 
 正式签名仍使用上游的环境变量接口 `GUIZANG_KEYSTORE`、`GUIZANG_STORE_PASSWORD`、`GUIZANG_KEY_ALIAS`、`GUIZANG_KEY_PASSWORD`；密钥在仓库外。`gradle :app:assembleRelease` 未配置签名时仅输出未签名包，不能当作可安装发布包。
 
-构建前会核对公开图片清单与 SHA-256，并拒绝清单外位图；照片导入不使用 `assets/wallpapers/local/`。旧 `prepare_wallpapers.py` 的构建内嵌流程不适用于本 fork，改用 [本机照片导入](docs/PHOTOS.md)。仓库配置了 CI 工作流，但截至 2026-10-23 查询没有运行记录，不能将配置文件当作 CI 已通过。工作流的 Debug 产物与维护者签名的 Releases 安装包不同。
+构建前会核对公开图片清单与 SHA-256，并拒绝清单外位图；照片导入不使用 `assets/wallpapers/local/`。旧 `prepare_wallpapers.py` 的构建内嵌流程不适用于本 fork，改用 [本机照片导入](docs/PHOTOS.md)。2026-10-23 的 [GitHub 干净环境构建](https://github.com/jhcina/jianbingshi-tv/actions/runs/39900425958) 已通过，对应代码提交 `41112ca`，包含 Debug 构建、Java 测试、lint 和 Python 流程测试。工作流的 Debug 产物与维护者签名的 Releases 安装包不同。
 
 ## 来源与素材
 
