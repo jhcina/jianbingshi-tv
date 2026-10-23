@@ -39,7 +39,7 @@ def main():
         return subprocess.run(base+list(command), check=True, capture_output=True).stdout
 
     if b"package:" not in adb("shell", "pm", "path", args.package):
-        raise ValueError("Install and open Yi TV before importing photos")
+        raise ValueError("Install and open Jianbingshi TV before importing photos")
     folder = "/sdcard/Android/data/"+args.package+"/files/my-wallpapers"
     catalog = folder+"/catalog.json"
     rows = []

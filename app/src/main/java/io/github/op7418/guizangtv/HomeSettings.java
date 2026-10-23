@@ -155,7 +155,7 @@ final class HomeSettings {
             case "tv":
                 entry("Home 键返回新桌面",HomeReturnService.enabled(a)?"已开启；点击查看或关闭":"未开启；点击打开辅助功能",()->HomeReturnService.openSettings(a));
                 if(HomeReturnService.enabled(a))entry("关闭 Home 自动返回","按 Home 恢复进入小米原桌面",()->{HomeReturnService.disable(a);a.message("已关闭 Home 自动返回");render();});
-                entry("开机自动进入",BootStart.enabled(a)?"已开启":"已关闭",()->BootStart.show(a));entry("电视系统设置","网络、声音、画面等",a::systemSettings);entry("小米原桌面","打开原来的电视首页",a::stockHome);break;
+                entry("开机自动进入",BootStart.enabled(a)?"已开启":"已关闭",()->BootStart.show(a));entry("电视系统设置","网络、声音、画面等",a::systemSettings);entry("小米原桌面","打开并暂停 Home 返回；重开本桌面恢复",a::stockHome);break;
             default:
                 String id=page.substring(5);int pos=a.items.order.indexOf(id);
                 if(pos>0)entry("上移","与上一项交换位置",()->move(id,-1));if(pos>=0&&pos<a.items.order.size()-1)entry("下移","与下一项交换位置",()->move(id,1));

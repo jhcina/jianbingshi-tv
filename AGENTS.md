@@ -1,4 +1,4 @@
-# 煎饼使 TV 分支补充
+# 煎饼使TV 分支补充
 
 先读本分支 README、docs/PHOTOS.md 与 docs/YI-COMPATIBILITY.md。公开包名 `io.github.jhcina.yitv`；通过 yiApplicationId 构建的既有私人包是另一个应用，不自动迁移数据。上游文档中的包名与实测结果只供参考，不可照抄配置。
 
