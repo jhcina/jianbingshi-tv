@@ -42,8 +42,8 @@ final class HomeSurface extends FrameLayout {
         LinearLayout list;
         if(dock){
             dockShelf=new DockShelf(c,items.order.size());list=dockShelf.track;
-            LayoutParams p=new LayoutParams(dp(884),dp(156),Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
-            p.bottomMargin=dp(48);addView(dockShelf,p);paintShelf();
+            LayoutParams p=new LayoutParams(-2,dp(148),Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
+            p.leftMargin=dp(48);p.rightMargin=dp(48);p.bottomMargin=dp(40);addView(dockShelf,p);paintShelf();
         }else{
             list=new LinearLayout(c);list.setOrientation(LinearLayout.VERTICAL);
             list.setClipChildren(false);list.setClipToPadding(false);
@@ -56,19 +56,22 @@ final class HomeSurface extends FrameLayout {
             String suffix="";
             LinearLayout tile=new LinearLayout(c);tile.setOrientation(dock?LinearLayout.VERTICAL:LinearLayout.HORIZONTAL);
             tile.setGravity(dock?Gravity.CENTER:Gravity.CENTER_VERTICAL);tile.setPadding(dp(dock?8:14),dp(dock?8:4),dp(dock?8:18),dp(dock?8:4));
-            TextView label=text(items.name(id),dock?14:style.size());label.setTypeface(style.typeface());
+            TextView label=text(items.name(id),dock?17:style.size());label.setTypeface(style.typeface());
             label.setMaxWidth(dp(dock?116:style.get("apps")==0?510:450));
             label.setMaxLines(1);label.setEllipsize(TextUtils.TruncateAt.END);
-            ImageView icon=new ImageView(c);icon.setImageDrawable(HomeIcons.get(c,id,style.ink()));
+            ImageView icon=new ImageView(c);
+            Drawable installed=dock?installedIcon(c,id):null;
+            icon.setImageDrawable(installed!=null?installed:HomeIcons.get(c,id,style.ink()));
+            icon.setTag(installed==null);icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
             int mode=style.get("apps");
-            if(mode!=0){LinearLayout.LayoutParams ip=new LinearLayout.LayoutParams(dp(dock?58:32),dp(dock?58:32));if(!dock)ip.rightMargin=dp(16);else ip.bottomMargin=dp(6);tile.addView(icon,ip);}
+            if(mode!=0){LinearLayout.LayoutParams ip=new LinearLayout.LayoutParams(dp(dock?64:32),dp(dock?64:32));if(!dock)ip.rightMargin=dp(16);else ip.bottomMargin=dp(6);tile.addView(icon,ip);}
             // Icon-only mode still reveals the focused app name and keeps its accessible label.
-            tile.addView(label,new LinearLayout.LayoutParams(dock?-1:-2,dock?dp(28):-2));
+            tile.addView(label,new LinearLayout.LayoutParams(dock?-1:-2,dock?dp(32):-2));
             label.setGravity(dock?Gravity.CENTER:Gravity.CENTER_VERTICAL);
             TextView tag=text(suffix,11);tag.setAlpha(.7f);
-            LinearLayout.LayoutParams tp=new LinearLayout.LayoutParams(-2,dock?dp(16):-2);if(!dock)tp.leftMargin=dp(16);tile.addView(tag,tp);
-            LinearLayout.LayoutParams row=new LinearLayout.LayoutParams(dock?dp(132):-2,dock?-1:dp(65));
-            if(dock&&i<items.order.size()-1)row.rightMargin=dp(10);list.addView(tile,row);apps.add(tile);
+            LinearLayout.LayoutParams tp=new LinearLayout.LayoutParams(-2,dock?dp(16):-2);if(!dock)tp.leftMargin=dp(16);if(!suffix.isEmpty())tile.addView(tag,tp);
+            LinearLayout.LayoutParams row=new LinearLayout.LayoutParams(dock?dp(144):-2,dock?-1:dp(65));
+            if(dock&&i<items.order.size()-1)row.rightMargin=dp(12);list.addView(tile,row);apps.add(tile);
             wire(tile,()->actions.open(id));tile.setContentDescription(items.name(id)+(suffix.isEmpty()?"":"，"+suffix));
             boolean chosen=index==this.selected;
             paint(tile,label,chosen,mode==1);
@@ -128,14 +131,20 @@ final class HomeSurface extends FrameLayout {
         if(!preview&&v.isAttachedToWindow()&&android.animation.ValueAnimator.areAnimatorsEnabled())v.animate().alpha(alpha).setDuration(150).start();else v.setAlpha(alpha);
         label.setVisibility(iconsOnly&&!focused&&style.get("layout")==0?GONE:VISIBLE);
         boolean action=controls.contains(v)&&focused;
-        int ink=action?0xFF262A24:focused?(style.light()?0xFF725200:0xFFFFD64E):style.ink();label.setTextColor(ink);
+        boolean dockFocus=dockShelf!=null&&apps.contains(v)&&focused;
+        int ink=(action||(dockFocus&&style.get("focus")==1))?0xFF262A24:focused?(style.light()?0xFF725200:0xFFFFD64E):style.ink();label.setTextColor(ink);
         if(v instanceof ViewGroup)for(int i=0;i<((ViewGroup)v).getChildCount();i++){
-            View child=((ViewGroup)v).getChildAt(i);if(child instanceof ImageView)((ImageView)child).setColorFilter(ink);
+            View child=((ViewGroup)v).getChildAt(i);if(child instanceof ImageView&&!Boolean.FALSE.equals(child.getTag()))((ImageView)child).setColorFilter(ink);
         }
         if(iconsOnly&&style.get("layout")==1)label.setAlpha(focused?1:0);
         if(action){v.setBackground(new FocusPaper(getResources().getDisplayMetrics().density));}
         else if(dockShelf!=null&&apps.contains(v)){
-            v.setBackground(WallpaperMaterial.rounded(focused&&style.get("focus")==1?(style.light()?0x20000000:0x26FFFFFF):Color.TRANSPARENT,dp(14)));
+            if(focused&&style.get("focus")==1)v.setBackground(new FocusPaper(getResources().getDisplayMetrics().density));
+            else {
+                GradientDrawable surface=WallpaperMaterial.rounded(Color.TRANSPARENT,dp(14));
+                if(focused)surface.setStroke(dp(2),style.light()?0xFF725200:0xFFFFD64E);
+                v.setBackground(surface);
+            }
         }else if(style.get("focus")==1&&focused){
             int veil=style.light()?0x2AFFFFFF:new int[]{0x60101418,0x48101418,0x30101418}[style.get("material")];
             v.setBackground(new WallpaperMaterial.Glass(this,v,material,dp(12),veil));
@@ -156,6 +165,11 @@ final class HomeSurface extends FrameLayout {
         if(style.get("background")==0)
             dockShelf.setBackground(new WallpaperMaterial.Glass(this,dockShelf,material,dp(22),new int[]{0x99101418,0x78101418,0x68101418}[style.get("material")]));
         else dockShelf.setBackground(WallpaperMaterial.rounded(style.light()?0xE6E0DED8:0xE624282B,dp(22)));
+    }
+    private Drawable installedIcon(Context context,String id){
+        if(id.startsWith("hdmi:"))return null;
+        try{return context.getPackageManager().getApplicationIcon(id).mutate();}
+        catch(android.content.pm.PackageManager.NameNotFoundException ignored){return null;}
     }
     private void wire(View v,Runnable run){
         v.setId(View.generateViewId());v.setFocusable(!preview);v.setFocusableInTouchMode(!preview);v.setClickable(!preview);

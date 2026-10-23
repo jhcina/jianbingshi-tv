@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 final class DockShelf extends FrameLayout {
     final LinearLayout track;
     private final FrameLayout viewport;
+    private final int contentWidth;
     private View selected;
     private int offset;
 
@@ -28,8 +29,14 @@ final class DockShelf extends FrameLayout {
         viewport.setClipChildren(true);viewport.setClipToPadding(true);
         addView(viewport,new LayoutParams(-1,-1));
         track=new LinearLayout(context);track.setOrientation(LinearLayout.HORIZONTAL);
-        int width=count*dp(132)+Math.max(0,count-1)*dp(10);
-        viewport.addView(track,new LayoutParams(width,-1));
+        contentWidth=DockScroll.contentWidth(count,dp(144),dp(12));
+        viewport.addView(track,new LayoutParams(contentWidth,-1));
+    }
+    @Override protected void onMeasure(int widthSpec,int heightSpec){
+        int available=MeasureSpec.getMode(widthSpec)==MeasureSpec.UNSPECIFIED
+                ?contentWidth+getPaddingLeft()+getPaddingRight():MeasureSpec.getSize(widthSpec);
+        int width=DockScroll.shelfWidth(available,contentWidth,getPaddingLeft());
+        super.onMeasure(MeasureSpec.makeMeasureSpec(width,MeasureSpec.EXACTLY),heightSpec);
     }
     void reveal(View tile,boolean animate){selected=tile;position(animate);}
     private void position(boolean animate){
@@ -38,7 +45,7 @@ final class DockShelf extends FrameLayout {
         offset=DockScroll.reveal(offset,selected.getLeft(),selected.getRight(),available,content);
         float x=content<=available?(available-content)/2f:-offset;
         track.animate().cancel();
-        if(animate)track.animate().translationX(x).setDuration(180).setInterpolator(new DecelerateInterpolator()).start();
+        if(animate&&android.animation.ValueAnimator.areAnimatorsEnabled())track.animate().translationX(x).setDuration(180).setInterpolator(new DecelerateInterpolator()).start();
         else track.setTranslationX(x);
     }
     @Override protected void onLayout(boolean changed,int left,int top,int right,int bottom){
