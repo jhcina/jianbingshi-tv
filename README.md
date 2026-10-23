@@ -1,5 +1,7 @@
 # 煎饼使TV
 
+> 本地启动引导候选分支：preview.4 尚未安装或实机验收。下面的公开下载仍为已发布的 preview.3；候选启动流程见 [启动指南](docs/STARTUP.md)。
+
 把电视首页留给常用应用和自己的照片。以 [op7418/guizang-tv](https://github.com/op7418/guizang-tv) 为底座的家庭照片桌面分支，保留归藏的大字、壁纸预览和遥控器交互，新增本机相册与看照片模式。
 
 **[下载已验证预览 APK](https://github.com/jhcina/jianbingshi-tv/releases/download/v0.5.0-preview.3/jianbingshi-tv-0.5.0-preview.3.apk) · [小白安装指南](docs/GETTING-STARTED.md) · [照片导入](docs/PHOTOS.md) · [兼容与恢复](docs/YI-COMPATIBILITY.md) · [来源与许可](NOTICE.md)**

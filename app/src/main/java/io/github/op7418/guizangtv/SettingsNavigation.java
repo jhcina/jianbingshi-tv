@@ -2,6 +2,7 @@ package io.github.op7418.guizangtv;
 
 final class SettingsNavigation {
     static String parent(String page){
+        if(page.equals("startup"))return "tv";
         if(page.equals("city"))return "weather";
         if(page.equals("wallpaper")||page.equals("private-wallpaper")||page.equals("rotation"))return "background";
         if(page.startsWith("item:")||page.equals("add"))return "home";

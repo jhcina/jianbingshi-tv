@@ -55,6 +55,8 @@ final class HomeSettings {
         View shade=new View(a);shade.setBackground(new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,new int[]{0xC2080C0F,0x7D080C0F}));stage.addView(shade,new FrameLayout.LayoutParams(-1,-1));
         dialog.setContentView(stage);render();TvMotion.enter(stage);a.updateRotation();
     }
+    void showStartup(){if(!showing())show();go("startup");}
+    void startupChanged(){if(showing()&&page.equals("startup"))render();}
     void close(){cityRequest++;searching=false;if(dialog!=null)dialog.dismiss();}
     private void back(){
         a.wallpapers.cancelPreview();a.wallpapers.cancelSelection();
@@ -64,7 +66,7 @@ final class HomeSettings {
     private void go(String next){cityRequest++;searching=false;a.wallpapers.cancelPreview();a.wallpapers.cancelSelection();page=next;render();}
     private String title(){
         switch(page){case "overview":return "设置";case "background":return "照片与背景";case "appearance":return "桌面外观";case "more":return "更多";case "wallpaper":return "默认壁纸";case "private-wallpaper":return "我的壁纸 · 仅本机";case "rotation":return "轮播";
-            case "weather":return "时间与天气";case "city":return "选择城市";case "layout":return "布局";case "type":return "字体";case "focus":return "选中样式";case "home":return "常用应用";case "add":return "首页内容 / 添加";case "tv":return "电视与启动";case "experiments":return "实验性功能";
+            case "weather":return "时间与天气";case "city":return "选择城市";case "layout":return "布局";case "type":return "字体";case "focus":return "选中样式";case "home":return "常用应用";case "add":return "首页内容 / 添加";case "tv":return "电视与启动";case "startup":return "首次启动设置";case "experiments":return "实验性功能";
             default:return "首页内容 / "+a.items.name(page.substring(5));}
     }
     private void render(){
@@ -165,10 +167,25 @@ final class HomeSettings {
                 note("开启后，首页显示 Codex 入口。需要同一网络内的电脑运行连接服务，并登录 Codex；使用相应账号额度。");
                 note("当前支持文字对话；语音输入取决于系统输入法。尚未接入日程、米家或电脑控制。");
                 note("关闭后隐藏入口并停止电视端连接，保留配对。已发送的回答可能继续在电脑完成；完全停用请在电脑停止连接服务。");break;
+            case "startup":
+                note("一次设置后不需要电脑保持在线。能否成为默认桌面，由电视系统决定。");
+                entry("设置默认桌面",StartupSetup.defaultHome(a)?"系统已将当前应用设为默认桌面":"打开系统选择，需本人确认",()->StartupSetup.requestDefault(a));
+                entry("开机自动进入",StartupSetup.bootSummary(a),()->BootStart.show(a));
+                if(XiaomiProfile.mftr0(android.os.Build.MODEL,android.os.Build.VERSION.INCREMENTAL))
+                    entry("主页键返回",HomeReturnService.enabled(a)?"当前已启用可选返回服务":"指定小米固件的可选辅助功能",()->HomeReturnService.openSettings(a));
+                else note("本机优先使用系统默认桌面；当前没有额外主页键返回适配。");
+                entry("重新检查状态","读取实际配置，不自动修改系统权限",this::render);
+                note(StartupSetup.anotherEdition(a)?"检测到另一份煎饼使TV：公开版与私人试用版各存各的数据。先保留原片，再决定保留哪份。":"当前未检测到另一个版本。重复快捷图标不等于安装了两份；可在电视系统应用管理中核对。");
+                note("小米若显示需要电脑配置：请查看仓库「第一次使用 → 启动指南」。开机目标与应用内开关都完成后，再重启验证。");break;
             case "tv":
-                entry("主页键返回新桌面",HomeReturnService.enabled(a)?"已开启；点击查看或关闭":"未开启；点击打开辅助功能",()->HomeReturnService.openSettings(a));
-                if(HomeReturnService.enabled(a))entry("关闭主页自动返回","按主页键恢复进入小米原桌面",()->{HomeReturnService.disable(a);a.message("已关闭主页自动返回");render();});
-                entry("开机自动进入",BootStart.enabled(a)?"已开启":"已关闭",()->BootStart.show(a));entry("电视系统设置","网络、声音、画面等",a::systemSettings);entry("小米原桌面","打开并暂停主页跳转；重开本桌面恢复",a::stockHome);break;
+                entry("启动设置向导","默认桌面、开机配置与版本检查",()->go("startup"));
+                if(XiaomiProfile.mftr0(android.os.Build.MODEL,android.os.Build.VERSION.INCREMENTAL)){
+                    entry("主页键返回新桌面",HomeReturnService.enabled(a)?"已开启；点击查看或关闭":"未开启；点击打开辅助功能",()->HomeReturnService.openSettings(a));
+                    if(HomeReturnService.enabled(a))entry("关闭主页自动返回","按主页键恢复进入小米原桌面",()->{HomeReturnService.disable(a);a.message("已关闭主页自动返回");render();});
+                }
+                if(XiaomiControls.enabled())entry("开机自动进入",BootStart.enabled(a)?"已开启":"已关闭",()->BootStart.show(a));
+                entry("电视系统设置","网络、声音、画面等",a::systemSettings);
+                if(XiaomiControls.enabled())entry("小米原桌面","打开并暂停主页跳转；重开本桌面恢复",a::stockHome);break;
             default:
                 String id=page.substring(5);int pos=a.items.order.indexOf(id);
                 if(pos>0)entry("上移","与上一项交换位置",()->move(id,-1));if(pos>=0&&pos<a.items.order.size()-1)entry("下移","与下一项交换位置",()->move(id,1));

@@ -32,3 +32,6 @@ companion-state/
 # Machine-local drafts, device backups, media and signing material.
 /.local/
 /dist/
+
+# Local one-time startup configuration backups
+startup-backup*.json

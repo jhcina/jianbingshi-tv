@@ -37,6 +37,7 @@ public final class FrameHomeActivity extends Activity implements HomeSurface.Act
     }};
     @Override protected void onCreate(Bundle state){
         super.onCreate(state);
+        boolean firstInstall=!getSharedPreferences("home-appearance",0).contains("yi_defaults_applied");
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN|View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         appearance=new HomeAppearance(this);items=new HomeItems(this);
         selected=getSharedPreferences("frame-home",0).getInt("selected",0);
@@ -49,6 +50,7 @@ public final class FrameHomeActivity extends Activity implements HomeSurface.Act
         assistant=new HomeAssistant(this);
         wallpapers.changed=()->{if(surface!=null)surface.wallpaper(wallpaperDrawable());};
         setContentView(root);refreshHome();surface.focusApp();
+        if(firstInstall)root.post(()->{if(!isFinishing()&&!isDestroyed())settings.showStartup();});
     }
     void refreshHome(){
         int restore=Math.max(0,Math.min(items.order.size()-1,selected));
@@ -121,6 +123,7 @@ public final class FrameHomeActivity extends Activity implements HomeSurface.Act
     }
     @Override protected void onActivityResult(int request,int result,Intent data){
         super.onActivityResult(request,result,data);
+        if(request==711){settings.startupChanged();return;}
         if(request!=IMPORT_PHOTO||result!=RESULT_OK||data==null||data.getData()==null)return;
         if(importing)return;
         importing=true;message("正在导入到我的壁纸…");
