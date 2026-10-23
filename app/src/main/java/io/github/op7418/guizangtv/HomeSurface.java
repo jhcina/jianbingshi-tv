@@ -53,7 +53,7 @@ final class HomeSurface extends FrameLayout {
         }
         for(int i=0;i<items.order.size();i++){
             String id=items.order.get(i);final int index=i;
-            String suffix=id.startsWith("hdmi:")?"HDMI "+id.substring(5):"";
+            String suffix="";
             LinearLayout tile=new LinearLayout(c);tile.setOrientation(dock?LinearLayout.VERTICAL:LinearLayout.HORIZONTAL);
             tile.setGravity(dock?Gravity.CENTER:Gravity.CENTER_VERTICAL);tile.setPadding(dp(dock?8:14),dp(dock?8:4),dp(dock?8:18),dp(dock?8:4));
             TextView label=text(items.name(id),dock?14:style.size());label.setTypeface(style.typeface());
@@ -128,7 +128,7 @@ final class HomeSurface extends FrameLayout {
         if(!preview&&v.isAttachedToWindow()&&android.animation.ValueAnimator.areAnimatorsEnabled())v.animate().alpha(alpha).setDuration(150).start();else v.setAlpha(alpha);
         label.setVisibility(iconsOnly&&!focused&&style.get("layout")==0?GONE:VISIBLE);
         boolean action=controls.contains(v)&&focused;
-        int ink=action?0xFF262A24:focused?0xFFFFCB22:style.ink();label.setTextColor(ink);
+        int ink=action?0xFF262A24:focused?(style.light()?0xFF725200:0xFFFFD64E):style.ink();label.setTextColor(ink);
         if(v instanceof ViewGroup)for(int i=0;i<((ViewGroup)v).getChildCount();i++){
             View child=((ViewGroup)v).getChildAt(i);if(child instanceof ImageView)((ImageView)child).setColorFilter(ink);
         }
@@ -159,7 +159,7 @@ final class HomeSurface extends FrameLayout {
     }
     private void wire(View v,Runnable run){
         v.setId(View.generateViewId());v.setFocusable(!preview);v.setFocusableInTouchMode(!preview);v.setClickable(!preview);
-        if(!preview){v.setOnClickListener(w->run.run());v.setOnKeyListener((w,key,e)->(key==KeyEvent.KEYCODE_DPAD_CENTER||key==KeyEvent.KEYCODE_ENTER)&&e.getAction()==KeyEvent.ACTION_DOWN&&e.getRepeatCount()>0);}
+        if(!preview){TvMotion.bind(v);v.setOnClickListener(w->run.run());v.setOnKeyListener((w,key,e)->(key==KeyEvent.KEYCODE_DPAD_CENTER||key==KeyEvent.KEYCODE_ENTER)&&e.getAction()==KeyEvent.ACTION_DOWN&&e.getRepeatCount()>0);}
     }
     private TextView text(String s,float size){TextView v=new TextView(getContext());v.setText(s);v.setTextSize(size);v.setTextColor(style.ink());v.setIncludeFontPadding(false);return v;}
     private int dp(float n){return Math.round(n*getResources().getDisplayMetrics().density);}

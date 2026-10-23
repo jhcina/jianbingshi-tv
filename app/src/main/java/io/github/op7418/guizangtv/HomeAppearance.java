@@ -16,7 +16,7 @@ final class HomeAppearance {
     boolean set(String key, int value) { return prefs.edit().putInt(key, AppearanceValues.normalize(key, value)).commit(); }
     boolean light() { return get("background") == 1; }
     int ink() { return light() ? 0xFF262A24 : 0xFFFFFDF7; }
-    float faded() { return new float[]{.75f, .55f, .35f}[get("dim")]; }
+    float faded() { return new float[]{.90f, .78f, .66f}[get("dim")]; }
     Typeface typeface() {
         return Typeface.create(new String[]{"sans-serif-light", "sans-serif", "serif"}[get("font")], Typeface.NORMAL);
     }

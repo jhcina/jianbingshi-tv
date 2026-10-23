@@ -25,6 +25,17 @@ final class HomeItems {
                 if (validId(id) && !order.contains(id)) order.add(id);
             }
         } catch (Exception ignored) { order.clear(); }
+        // One-time consolidation: system settings remain under the single Settings entry.
+        android.content.SharedPreferences prefs=c.getSharedPreferences("home-items",0);
+        if(!prefs.getBoolean("settings_consolidated_v1",false)){
+            List<String> compact=new ArrayList<>(order);compact.removeIf(SettingsNavigation::systemSettings);
+            android.content.SharedPreferences.Editor edit=prefs.edit().putBoolean("settings_consolidated_v1",true);
+            if(!compact.isEmpty()&&!compact.equals(order)){
+                edit.putString("before_settings_consolidation",new JSONArray(order).toString());
+                edit.putString("order",new JSONArray(compact).toString());
+            }
+            if(edit.commit()&&!compact.isEmpty()){order.clear();order.addAll(compact);}
+        }
         if (order.isEmpty()) {
             for(String id:DEFAULTS)if(available(id))order.add(id);
             List<String> installed=new ArrayList<>(names.keySet());
@@ -35,12 +46,18 @@ final class HomeItems {
     }
     private boolean available(String id) {
         if(id.startsWith("hdmi:"))return false;
+        if(id.equals("com.android.settings")){
+            Intent settings=XiaomiControls.settings(context,android.provider.Settings.ACTION_SETTINGS);
+            return settings!=null&&settings.resolveActivity(context.getPackageManager())!=null;
+        }
         if(id.equals("com.xiaomi.mitv.mediaexplorer"))return context.getPackageManager().resolveActivity(
                 new Intent("duokan.mediaexplorer.intent.action.BROWSE_DEVICE_LIST").setPackage(id),0)!=null;
         return context.getPackageManager().getLeanbackLaunchIntentForPackage(id)!=null
                 ||context.getPackageManager().getLaunchIntentForPackage(id)!=null;
     }
     void discover() {
+        Intent system=XiaomiControls.settings(context,android.provider.Settings.ACTION_SETTINGS);
+        if(system!=null&&system.resolveActivity(context.getPackageManager())!=null)names.put("com.android.settings","电视系统设置");
         if (XiaomiControls.enabled()) {
             names.put("hdmi:1", "HDMI 1"); names.put("hdmi:2", "HDMI 2");
             if (XiaomiProfile.mftr0(android.os.Build.MODEL, android.os.Build.VERSION.INCREMENTAL)) names.put("hdmi:3", "HDMI 3");
@@ -49,8 +66,8 @@ final class HomeItems {
         for (String category : new String[]{Intent.CATEGORY_LEANBACK_LAUNCHER, Intent.CATEGORY_LAUNCHER}) {
             for (ResolveInfo r : context.getPackageManager().queryIntentActivities(new Intent(Intent.ACTION_MAIN).addCategory(category), 0)) {
                 String id = r.activityInfo.packageName;
-                if (!id.equals(context.getPackageName()) && r.activityInfo.enabled && r.activityInfo.exported)
-                    names.putIfAbsent(id, XiaomiControls.label(id, r.loadLabel(context.getPackageManager()).toString()));
+                if (!id.equals(context.getPackageName()) && !SettingsNavigation.systemSettings(id) && r.activityInfo.enabled && r.activityInfo.exported)
+                    names.putIfAbsent(id, SettingsNavigation.systemSettings(id)?"电视系统设置":XiaomiControls.label(id, r.loadLabel(context.getPackageManager()).toString()));
             }
         }
     }

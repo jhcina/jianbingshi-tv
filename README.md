@@ -2,9 +2,9 @@
 
 把电视首页留给常用应用和自己的照片。以 [op7418/guizang-tv](https://github.com/op7418/guizang-tv) 为底座的家庭照片桌面分支，保留归藏的大字、壁纸预览和遥控器交互，新增本机相册与看照片模式。
 
-**[下载预览版](https://github.com/jhcina/jianbingshi-tv/releases) · [照片导入](docs/PHOTOS.md) · [兼容与恢复](docs/YI-COMPATIBILITY.md) · [来源与许可](NOTICE.md)**
+**[下载已验证预览 APK](https://github.com/jhcina/jianbingshi-tv/releases/download/v0.5.0-preview.2/jianbingshi-tv-0.5.0-preview.2.apk) · [小白安装指南](docs/GETTING-STARTED.md) · [照片导入](docs/PHOTOS.md) · [兼容与恢复](docs/YI-COMPATIBILITY.md) · [来源与许可](NOTICE.md)**
 
-当前为 **0.5.0-preview.2**，适合愿意反馈的用户。**已知限制：MFTR0 本次待机后检查发现辅助功能列表为空，原因待查；Home 持久性尚未验证，建议先作为普通 App 试用。**它是 Android 电视桌面 App；安装不会刷写电视固件，也不会删除原桌面。
+推荐下载为 **0.5.0-preview.2，尚非正式稳定版**；main 正在开发 0.5.0-preview.3（尚未发布），适合愿意反馈的用户。**已知限制：MFTR0 本次待机后检查发现辅助功能列表为空，原因待查；Home 持久性尚未验证，建议先作为普通 App 试用。**它是 Android 电视桌面 App；安装不会刷写电视固件，也不会删除原桌面。
 
 ![MFTR0 实机桌面截图](docs/screenshots/home.png)
 
@@ -56,7 +56,7 @@ python -m unittest discover -s scripts -p 'test_*.py'
 
 正式签名仍使用上游的环境变量接口 `GUIZANG_KEYSTORE`、`GUIZANG_STORE_PASSWORD`、`GUIZANG_KEY_ALIAS`、`GUIZANG_KEY_PASSWORD`；密钥在仓库外。`gradle :app:assembleRelease` 未配置签名时仅输出未签名包，不能当作可安装发布包。
 
-构建前会核对公开图片清单与 SHA-256，并拒绝清单外位图；照片导入不使用 `assets/wallpapers/local/`。旧 `prepare_wallpapers.py` 的构建内嵌流程不适用于本 fork，改用 [本机照片导入](docs/PHOTOS.md)。CI 构建的是 Debug 测试产物，Releases 才提供维护者签名预览包。
+构建前会核对公开图片清单与 SHA-256，并拒绝清单外位图；照片导入不使用 `assets/wallpapers/local/`。旧 `prepare_wallpapers.py` 的构建内嵌流程不适用于本 fork，改用 [本机照片导入](docs/PHOTOS.md)。仓库配置了 CI 工作流，但截至 2026-10-23 查询没有运行记录，不能将配置文件当作 CI 已通过。工作流的 Debug 产物与维护者签名的 Releases 安装包不同。
 
 ## 来源与素材
 
@@ -65,3 +65,7 @@ python -m unittest discover -s scripts -p 'test_*.py'
 代码采用 MIT。三张本人航拍署名“煎饼使”，按[壁纸再分发许可](app/src/main/assets/wallpapers/public-defaults/NOTICE.md)随项目使用；其余五张照片保留 Unsplash 来源和许可，均不因代码 MIT 而变成 MIT 素材。人物照片与 AI 重建室内图不在公开分发中。
 
 反馈时请提供机型、固件和复现步骤，去掉账号、网络地址、序列号与私人照片。当前已知验证范围见 [兼容性记录](docs/YI-COMPATIBILITY.md)。
+
+## 稳定版与产品方向
+
+发布门槛和当前缺口见 [正式版准备与差异化](docs/RELEASE-READINESS.md)。视觉改进见 [电视视觉规范](docs/TV-DESIGN.md)。安装包以 Releases 的签名版本为准，main 的版本号不表示已发布。

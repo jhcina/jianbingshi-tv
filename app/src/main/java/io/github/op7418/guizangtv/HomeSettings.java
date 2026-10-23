@@ -53,18 +53,18 @@ final class HomeSettings {
         stage=new FrameLayout(a);stage.setBackgroundColor(0xFF121619);
         backdrop=new ImageView(a);backdrop.setScaleType(ImageView.ScaleType.CENTER_CROP);stage.addView(backdrop,new FrameLayout.LayoutParams(-1,-1));
         View shade=new View(a);shade.setBackground(new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,new int[]{0xC2080C0F,0x7D080C0F}));stage.addView(shade,new FrameLayout.LayoutParams(-1,-1));
-        dialog.setContentView(stage);render();a.updateRotation();
+        dialog.setContentView(stage);render();TvMotion.enter(stage);a.updateRotation();
     }
     void close(){cityRequest++;searching=false;if(dialog!=null)dialog.dismiss();}
     private void back(){
         a.wallpapers.cancelPreview();a.wallpapers.cancelSelection();
         if(page.equals("overview")){close();return;}
-        go(page.equals("city")?"weather":page.equals("wallpaper")||page.equals("private-wallpaper")||page.equals("rotation")?"background":page.startsWith("item:")||page.equals("add")?"home":"overview");
+        go(SettingsNavigation.parent(page));
     }
     private void go(String next){cityRequest++;searching=false;a.wallpapers.cancelPreview();a.wallpapers.cancelSelection();page=next;render();}
     private String title(){
-        switch(page){case "overview":return "设置";case "background":return "背景";case "wallpaper":return "默认壁纸";case "private-wallpaper":return "我的壁纸 · 仅本机";case "rotation":return "轮播";
-            case "weather":return "时间与天气";case "city":return "选择城市";case "layout":return "布局";case "type":return "字体";case "focus":return "选中样式";case "home":return "首页内容";case "add":return "首页内容 / 添加";case "tv":return "电视与启动";case "experiments":return "实验性功能";
+        switch(page){case "overview":return "设置";case "background":return "照片与背景";case "appearance":return "桌面外观";case "more":return "更多";case "wallpaper":return "默认壁纸";case "private-wallpaper":return "我的壁纸 · 仅本机";case "rotation":return "轮播";
+            case "weather":return "时间与天气";case "city":return "选择城市";case "layout":return "布局";case "type":return "字体";case "focus":return "选中样式";case "home":return "常用应用";case "add":return "首页内容 / 添加";case "tv":return "电视与启动";case "experiments":return "实验性功能";
             default:return "首页内容 / "+a.items.name(page.substring(5));}
     }
     private void render(){
@@ -73,7 +73,9 @@ final class HomeSettings {
         LinearLayout panel=new LinearLayout(a);panel.setOrientation(LinearLayout.VERTICAL);
         panel.setPadding(a.dp(70),a.dp(overview?42:24),a.dp(70),a.dp(30));
         if(!overview){
-            TextView back=label("‹  "+(page.equals("wallpaper")||page.equals("private-wallpaper")||page.equals("rotation")?"背景":"设置"),14);
+            String parent=SettingsNavigation.parent(page);
+            String parentLabel=parent.equals("background")?"照片与背景":parent.equals("appearance")?"桌面外观":parent.equals("more")?"更多":parent.equals("weather")?"时间与天气":parent.equals("home")?"常用应用":"设置";
+            TextView back=label("‹  "+parentLabel,14);
             back.setTextColor(0xBBFFFFFF);back.setFocusable(true);back.setOnClickListener(v->back());
             back.setPadding(a.dp(8),0,a.dp(10),0);
             back.setOnFocusChangeListener((v,f)->decorate(v,f));
@@ -83,8 +85,8 @@ final class HomeSettings {
         panel.addView(title,new LinearLayout.LayoutParams(-1,a.dp(overview?64:68)));
         LinearLayout body=new LinearLayout(a);body.setOrientation(LinearLayout.HORIZONTAL);
         panel.addView(body,new LinearLayout.LayoutParams(-1,0,1));
-        ScrollView scroll=new ScrollView(a);scroll.setVerticalScrollBarEnabled(false);scroll.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        options=new LinearLayout(a);options.setOrientation(LinearLayout.VERTICAL);options.setPadding(0,0,0,a.dp(12));
+        ScrollView scroll=new ScrollView(a);scroll.setVerticalScrollBarEnabled(false);scroll.setClipToPadding(false);scroll.setClipChildren(false);scroll.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        options=new LinearLayout(a);options.setOrientation(LinearLayout.VERTICAL);options.setClipChildren(false);options.setClipToPadding(false);options.setPadding(0,0,0,a.dp(12));
         scroll.addView(options,new ScrollView.LayoutParams(-1,-2));
         body.addView(scroll,new LinearLayout.LayoutParams(a.dp(overview?528:320),-1));
         LinearLayout right=new LinearLayout(a);right.setOrientation(LinearLayout.VERTICAL);right.setGravity(Gravity.CENTER_VERTICAL);
@@ -95,14 +97,25 @@ final class HomeSettings {
         status=label("首页预览",14);status.setTextColor(0xBFFFFFFF);status.setPadding(0,a.dp(16),0,0);
         right.addView(status,new LinearLayout.LayoutParams(-1,a.dp(65)));
         if(overview)right.setVisibility(View.GONE);
-        TextView footer=label(overview?"确定  打开选项":"确定  应用设置        返回  上一级",13);footer.setTextColor(0xA6FFFFFF);
+        TextView footer=label(overview?"":"确定  应用设置        返回  上一级",13);footer.setTextColor(0xA6FFFFFF);
         panel.addView(footer,new LinearLayout.LayoutParams(-1,a.dp(26)));
         switch(page){
             case "overview":
                 entry("看照片", "收起首页文字 · 左右换图 · 返回退出",a::showPhotoMode);
-                entry("背景", "壁纸、轮播与纯色",()->go("background"));entry("布局","列表、Dock、图标与文字",()->go("layout"));
-                entry("字体","字形与字号",()->go("type"));entry("选中样式","文字高亮与毛玻璃",()->go("focus"));
-                entry("时间与天气","城市、温度与天气显示",()->go("weather"));entry("首页内容","添加、排序、隐藏",()->go("home"));entry("电视与启动","自动进入与小米系统",()->go("tv"));entry("实验性功能","Codex 对话 · 默认关闭",()->go("experiments"));break;
+                TextView photoAction=(TextView)choices.get(choices.size()-1);photoAction.setCompoundDrawables(null,null,null,null);
+                ((LinearLayout.LayoutParams)photoAction.getLayoutParams()).bottomMargin=a.dp(12);
+                entry("照片与背景","壁纸、我的照片与轮播",()->go("background"));
+                entry("桌面外观","布局、文字与焦点质感",()->go("appearance"));
+                entry("常用应用","添加、排序与隐藏",()->go("home"));
+                entry("电视与启动","系统设置、主页键与开机",()->go("tv"));
+                entry("更多","天气与实验功能",()->go("more"));break;
+            case "appearance":
+                entry("布局与图标","列表或 Dock · 应用与操作显示",()->go("layout"));
+                entry("文字与字号","字体风格与首页字号",()->go("type"));
+                entry("焦点与质感","高亮、磨砂与未选中项淡化",()->go("focus"));break;
+            case "more":
+                entry("时间与天气","城市、温度与天气显示",()->go("weather"));
+                entry("实验性功能","Codex 对话 · 默认关闭",()->go("experiments"));break;
             case "background":
                 row("背景","background",new String[]{"照片","浅色","深色"});
                 if(a.appearance.get("background")==0){entry("默认壁纸","风景、空景与内置照片",()->go("wallpaper"));entry("我的壁纸","仅保存在这台电视",()->go("private-wallpaper"));entry("轮播",a.wallpapers.rotating()?"每 "+a.wallpapers.minutes()+" 分钟":"固定壁纸",()->go("rotation"));}
@@ -153,9 +166,9 @@ final class HomeSettings {
                 note("当前支持文字对话；语音输入取决于系统输入法。尚未接入日程、米家或电脑控制。");
                 note("关闭后隐藏入口并停止电视端连接，保留配对。已发送的回答可能继续在电脑完成；完全停用请在电脑停止连接服务。");break;
             case "tv":
-                entry("Home 键返回新桌面",HomeReturnService.enabled(a)?"已开启；点击查看或关闭":"未开启；点击打开辅助功能",()->HomeReturnService.openSettings(a));
-                if(HomeReturnService.enabled(a))entry("关闭 Home 自动返回","按 Home 恢复进入小米原桌面",()->{HomeReturnService.disable(a);a.message("已关闭 Home 自动返回");render();});
-                entry("开机自动进入",BootStart.enabled(a)?"已开启":"已关闭",()->BootStart.show(a));entry("电视系统设置","网络、声音、画面等",a::systemSettings);entry("小米原桌面","打开并暂停 Home 返回；重开本桌面恢复",a::stockHome);break;
+                entry("主页键返回新桌面",HomeReturnService.enabled(a)?"已开启；点击查看或关闭":"未开启；点击打开辅助功能",()->HomeReturnService.openSettings(a));
+                if(HomeReturnService.enabled(a))entry("关闭主页自动返回","按主页键恢复进入小米原桌面",()->{HomeReturnService.disable(a);a.message("已关闭主页自动返回");render();});
+                entry("开机自动进入",BootStart.enabled(a)?"已开启":"已关闭",()->BootStart.show(a));entry("电视系统设置","网络、声音、画面等",a::systemSettings);entry("小米原桌面","打开并暂停主页跳转；重开本桌面恢复",a::stockHome);break;
             default:
                 String id=page.substring(5);int pos=a.items.order.indexOf(id);
                 if(pos>0)entry("上移","与上一项交换位置",()->move(id,-1));if(pos>=0&&pos<a.items.order.size()-1)entry("下移","与下一项交换位置",()->move(id,1));
@@ -163,7 +176,7 @@ final class HomeSettings {
                 else note("至少保留一个首页入口。");break;
         }
         if(content!=null)stage.removeView(content);content=panel;stage.addView(panel,new FrameLayout.LayoutParams(-1,-1));
-        refreshPreview();background(a.wallpaperDrawable());rendering=false;weatherChanged();
+        refreshPreview();background(a.appearance.get("background")==0?a.wallpaperDrawable():null);rendering=false;weatherChanged();
         if(!choices.isEmpty())choices.get(Math.min(remembered.getOrDefault(page,0),choices.size()-1)).requestFocus();
     }
     private void experiment(boolean enabled){
@@ -237,7 +250,7 @@ final class HomeSettings {
         LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,a.dp(subtitle.isEmpty()?44:56));lp.bottomMargin=a.dp(4);options.addView(v,lp);decorate(v,false);
     }
     private TextView button(String text,Runnable run){
-        TextView v=label(text,19);v.setPadding(a.dp(14),a.dp(5),a.dp(16),a.dp(5));v.setGravity(Gravity.CENTER_VERTICAL);v.setId(View.generateViewId());v.setFocusable(true);v.setFocusableInTouchMode(true);v.setClickable(true);choices.add(v);
+        TextView v=label(text,19);v.setPadding(a.dp(14),a.dp(5),a.dp(16),a.dp(5));v.setGravity(Gravity.CENTER_VERTICAL);v.setId(View.generateViewId());v.setFocusable(true);v.setFocusableInTouchMode(true);v.setClickable(true);TvMotion.bind(v);choices.add(v);
         v.setOnFocusChangeListener((view,focus)->{decorate(view,focus);if(focus&&!rendering)remembered.put(page,choices.indexOf(view));});
         v.setOnClickListener(view->run.run());v.setOnKeyListener((view,key,e)->(key==KeyEvent.KEYCODE_DPAD_CENTER||key==KeyEvent.KEYCODE_ENTER)&&e.getAction()==KeyEvent.ACTION_DOWN&&e.getRepeatCount()>0);return v;
     }
@@ -250,11 +263,12 @@ final class HomeSettings {
             text.setSpan(new AbsoluteSizeSpan(13,true),line+1,value.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             text.setSpan(new ForegroundColorSpan(focus?0xA6202321:0xA6FFFFFF),line+1,value.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);v.setText(text);}
 
-        Drawable arrow=v.getCompoundDrawables()[2];if(arrow!=null)arrow.setTint(focus?0x99202321:0xAAFFFFFF);
+        Drawable arrow=v.getCompoundDrawables()[2];if(arrow!=null)arrow.setTint(focus?0xFF262A24:0xCCFFFFFF);
     }
     private TextView label(String s,int size){TextView v=new TextView(a);v.setText(s);v.setTextSize(size);v.setTextColor(0xF2FFFFFF);v.setTypeface(android.os.Build.VERSION.SDK_INT>=28?Typeface.create(Typeface.create("sans-serif",Typeface.NORMAL),300,false):Typeface.create("sans-serif-light",Typeface.NORMAL));v.setIncludeFontPadding(false);return v;}
     private void background(Drawable source){
         int request=++backdropRequest;
+        if(source==null){backdrop.setImageDrawable(null);return;}
         WallpaperMaterial.request(source,42,image->{if(request==backdropRequest&&showing()&&image!=null)backdrop.setImageBitmap(image);});
     }
     private Drawable roundedThumb(Drawable source){

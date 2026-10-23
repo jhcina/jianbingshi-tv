@@ -144,7 +144,7 @@ final class HomeAssistant {
         ImageView v=new ImageView(a);v.setImageResource(resource);v.setColorFilter(primary?0xFF172033:0xCCDCE7F8);v.setContentDescription(name);
         v.setPadding(a.dp(11),a.dp(11),a.dp(11),a.dp(11));v.setFocusable(true);v.setFocusableInTouchMode(true);v.setClickable(true);
         v.setBackground(WallpaperMaterial.rounded(primary?0xE6E9EEF8:0x00FFFFFF,a.dp(23)));
-        v.setOnFocusChangeListener((view,focus)->v.setBackground(WallpaperMaterial.rounded(focus?0xFFB8D7FE:primary?0xE6E9EEF8:0x00FFFFFF,a.dp(23))));
+        v.setOnFocusChangeListener((view,focus)->v.setBackground(WallpaperMaterial.rounded(focus?0xFFFFD64E:primary?0xE6E9EEF8:0x00FFFFFF,a.dp(23))));
         v.setOnClickListener(view->action.run());parent.addView(v,new LinearLayout.LayoutParams(a.dp(44),a.dp(44)));return v;
     }
     private void submit(){

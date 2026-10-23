@@ -1,7 +1,6 @@
 package io.github.op7418.guizangtv;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -53,29 +52,20 @@ public final class BootStart {
         }
     }
     static void settings(Activity a, Runnable systemSettings) {
-        new AlertDialog.Builder(a).setTitle("设置")
-                .setItems(new String[]{"电视系统设置", "开机自动进入：" + (enabled(a) ? "已开启" : "已关闭")},
-                        (d, i) -> { if (i == 0) systemSettings.run(); else show(a); })
-                .setNegativeButton("返回", null).show();
+        TvPanel.show(a,"设置",null,new String[]{"电视系统设置", "开机自动进入："+(enabled(a)?"已开启":"已关闭")},
+                i->{if(i==0)systemSettings.run();else show(a);},1);
     }
     static void show(Activity a) {
-        if (!XiaomiControls.enabled()) {
-            new AlertDialog.Builder(a).setTitle("开机自动进入（实验）")
-                    .setMessage("目前仅适配 MiTV-MTSU0。其他机型请先使用普通应用入口。")
-                    .setNegativeButton("返回", null).show();
-            return;
+        if(!XiaomiControls.enabled()){
+            TvPanel.show(a,"开机自动进入（实验）","这台设备尚未适配。请先使用普通应用入口。",new String[0],i->{},1);return;
         }
-        String state = prefs(a).getString("status", "尚未进行完整重启测试");
-        new AlertDialog.Builder(a).setTitle("开机自动进入（实验）")
-                .setMessage("仅在完整开机后尝试一次，不接管 Home 键，同次开机的后续调用直接跳过。\n\n"
-                        + "由已适配的小米系统调用启动入口；不需要悬浮窗权限。\n\n"
-                        + "系统入口：" + (configured(a) ? "已配置" : "尚未配置，需电脑设置") + "\n上次状态：" + state)
-                .setPositiveButton(enabled(a) ? "关闭自动进入" : "开启自动进入", (d, which) -> {
-                    boolean value = !enabled(a);
-                    prefs(a).edit().putBoolean("enabled", value).apply();
-                    Toast.makeText(a, value ? (configured(a) ? "已开启，下次完整重启时尝试进入" : "开关已开启，还需按项目文档配置系统入口") : "已关闭开机自动进入", Toast.LENGTH_LONG).show();
-                })
-                .setNegativeButton("返回", null).show();
+        String state=prefs(a).getString("status","尚未进行完整重启测试");
+        TvPanel.show(a,"开机自动进入（实验）",
+                "完整开机后尝试一次，不接管 Home 键，不需要悬浮窗权限。\n系统入口："+(configured(a)?"已配置":"尚未配置，需电脑设置")+"\n上次状态："+state,
+                new String[]{enabled(a)?"关闭自动进入":"开启自动进入"},i->{
+                    boolean value=!enabled(a);prefs(a).edit().putBoolean("enabled",value).apply();
+                    Toast.makeText(a,value?(configured(a)?"已开启，下次完整重启时尝试进入":"开关已开启，还需按项目文档配置系统入口"):"已关闭开机自动进入",Toast.LENGTH_LONG).show();
+                },1);
     }
     static void dump(Context c, java.io.PrintWriter out) {
         out.println("BootStart: enabled=" + enabled(c) + " configured=" + configured(c)
