@@ -3,8 +3,25 @@ package io.github.op7418.guizangtv;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 
-/** Monochrome SVG marks, converted losslessly to Android vectors. See assets/icons/SOURCES.json. */
+/** Optional local artwork with monochrome vector fallbacks; see assets/icons/SOURCES.json. */
 final class HomeIcons {
+    private static final android.util.LruCache<Integer,android.graphics.Bitmap> ART=new android.util.LruCache<>(8);
+    static Drawable themed(Context context,String id){
+        String name=IconArtwork.name(id);if(name==null)return null;
+        int resource=context.getResources().getIdentifier(name,"drawable",context.getPackageName());
+        if(resource==0)return null;
+        android.graphics.Bitmap bitmap=ART.get(resource);
+        if(bitmap==null){
+            android.graphics.BitmapFactory.Options options=new android.graphics.BitmapFactory.Options();
+            options.inJustDecodeBounds=true;android.graphics.BitmapFactory.decodeResource(context.getResources(),resource,options);
+            int target=Math.max(64,Math.round(64*context.getResources().getDisplayMetrics().density));
+            options.inSampleSize=IconArtwork.sample(options.outWidth,options.outHeight,target);
+            options.inJustDecodeBounds=false;options.inScaled=false;
+            bitmap=android.graphics.BitmapFactory.decodeResource(context.getResources(),resource,options);
+            if(bitmap==null)return null;ART.put(resource,bitmap);
+        }
+        return new android.graphics.drawable.BitmapDrawable(context.getResources(),bitmap);
+    }
     static Drawable get(Context context,String id,int color){
         int resource;
         switch(id){

@@ -10,6 +10,9 @@ android {
         versionCode 11
         versionName '0.5.0-preview.4'
     }
+    // Explicit local opt-in. Default public builds contain no private icon pack.
+    def localIcons = providers.gradleProperty('yiIconPackDir').orNull
+    if (localIcons) sourceSets.main.res.srcDir(file(localIcons))
     signingConfigs {
         release {
             if (System.getenv('GUIZANG_KEYSTORE')) {

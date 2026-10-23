@@ -60,11 +60,13 @@ final class HomeSurface extends FrameLayout {
             label.setMaxWidth(dp(dock?116:style.get("apps")==0?510:450));
             label.setMaxLines(1);label.setEllipsize(TextUtils.TruncateAt.END);
             ImageView icon=new ImageView(c);
-            Drawable installed=dock?installedIcon(c,id):null;
+            Drawable artwork=HomeIcons.themed(c,id);
+            Drawable installed=artwork!=null?artwork:dock?installedIcon(c,id):null;
             icon.setImageDrawable(installed!=null?installed:HomeIcons.get(c,id,style.ink()));
             icon.setTag(installed==null);icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            if(artwork!=null&&style.light())icon.setBackground(WallpaperMaterial.rounded(0x2411151B,dp(10)));
             int mode=style.get("apps");
-            if(mode!=0){LinearLayout.LayoutParams ip=new LinearLayout.LayoutParams(dp(dock?64:32),dp(dock?64:32));if(!dock)ip.rightMargin=dp(16);else ip.bottomMargin=dp(6);tile.addView(icon,ip);}
+            if(mode!=0){LinearLayout.LayoutParams ip=new LinearLayout.LayoutParams(dp(dock?64:artwork!=null?44:32),dp(dock?64:artwork!=null?44:32));if(!dock)ip.rightMargin=dp(16);else ip.bottomMargin=dp(6);tile.addView(icon,ip);}
             // Icon-only mode still reveals the focused app name and keeps its accessible label.
             tile.addView(label,new LinearLayout.LayoutParams(dock?-1:-2,dock?dp(32):-2));
             label.setGravity(dock?Gravity.CENTER:Gravity.CENTER_VERTICAL);
@@ -93,7 +95,13 @@ final class HomeSurface extends FrameLayout {
             final int index=i;LinearLayout line=new LinearLayout(c);line.setGravity(Gravity.END|Gravity.CENTER_VERTICAL);
             TextView label=text(names[i],16);label.setTypeface(style.typeface());int mode=style.get("controls");
             line.addView(label,new LinearLayout.LayoutParams(-2,-2));
-            if(mode!=0){ImageView icon=new ImageView(c);icon.setImageDrawable(HomeIcons.get(c,"control:"+ids[i],style.ink()));LinearLayout.LayoutParams ip=new LinearLayout.LayoutParams(dp(23),dp(23));ip.leftMargin=dp(12);line.addView(icon,ip);}
+            if(mode!=0){
+                ImageView icon=new ImageView(c);Drawable art=HomeIcons.themed(c,"control:"+ids[i]);
+                icon.setImageDrawable(art!=null?art:HomeIcons.get(c,"control:"+ids[i],style.ink()));
+                icon.setTag(art==null);icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                if(art!=null&&style.light())icon.setBackground(WallpaperMaterial.rounded(0x2411151B,dp(8)));
+                LinearLayout.LayoutParams ip=new LinearLayout.LayoutParams(dp(art!=null?32:23),dp(art!=null?32:23));ip.leftMargin=dp(12);line.addView(icon,ip);
+            }
             line.setPadding(dp(12),0,dp(12),0);side.addView(line,new LinearLayout.LayoutParams(-2,dp(40)));controls.add(line);
             wire(line,()->actions.control(index));line.setContentDescription(names[i]);
             paint(line,label,false,mode==1);line.setOnFocusChangeListener((v,focus)->paint(line,label,focus,mode==1));
