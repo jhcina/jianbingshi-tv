@@ -2,6 +2,8 @@
 
 > 本地 preview.4 候选已在 MFTR0 安装：黄黑主体图标、对齐与可选待机恢复已做阶段检查，三次短时关屏唤醒通过；完整重启、长期待机仍待验收。公开下载仍为 preview.3。见 [待机恢复](docs/STANDBY-RECOVERY.md)、[复用评估](docs/OPEN-SOURCE-REUSE.md) 与 [壁纸许可](docs/WALLPAPERS.md)。
 
+本地候选默认图库现有 15 张：八张摄影署名“乙”的原创作品，另有七张保持原作者署名的 Unsplash 图片；照片与代码采用不同许可，见 [壁纸说明](docs/WALLPAPERS.md)。人物照片不随公开项目分发。
+
 把电视首页留给常用应用和自己的照片。以 [op7418/guizang-tv](https://github.com/op7418/guizang-tv) 为底座的家庭照片桌面分支，保留归藏的大字、壁纸预览和遥控器交互，新增本机相册与看照片模式。
 
 **[下载已验证预览 APK](https://github.com/jhcina/jianbingshi-tv/releases/download/v0.5.0-preview.3/jianbingshi-tv-0.5.0-preview.3.apk) · [小白安装指南](docs/GETTING-STARTED.md) · [照片导入](docs/PHOTOS.md) · [兼容与恢复](docs/YI-COMPATIBILITY.md) · [来源与许可](NOTICE.md)**

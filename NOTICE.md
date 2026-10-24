@@ -6,7 +6,7 @@
 
 本机照片方向识别使用 AndroidX ExifInterface 1.4.2（Android Open Source Project，Apache License 2.0），未修改库源码。完整许可随 APK 保存于 `assets/licenses/ANDROIDX-APACHE-2.0.txt`，来源：https://developer.android.com/jetpack/androidx/releases/exifinterface 。AndroidX 的传递注解依赖按其 Apache 2.0 许可使用；JSpecify 1.0.0、Kotlin 标准库 1.7.10 及 JetBrains annotations 13.0 均按各自 Apache 2.0 许可使用；AndroidX annotation 1.8.1 是本库的传递依赖。
 
-三张航拍作者为煎饼使，许可见 `app/src/main/assets/wallpapers/public-defaults/NOTICE.md`；它们与五张 Unsplash 照片均不适用代码 MIT。人物、私人截图与 AI 重建室内图不分发。
+八张原创摄影署名为乙，适用限定的项目内壁纸使用许可，详见 `app/src/main/assets/wallpapers/public-defaults/NOTICE.md`；它们与七张 Unsplash 照片均不适用代码 MIT。人物、私人截图与 AI 重建室内图不分发。
 
 ---
 
@@ -29,7 +29,7 @@
 - Android Gradle Plugin、Gradle 与 JUnit 是构建或测试依赖，各自适用其许可证；不代表被重新许可为 MIT。
 - 各产品与商标归其权利人所有。本项目不隶属于小米、Sony、Apple 或哔哩哔哩。
 
-v0.1.1 起，内置五张经原页面核对的 Unsplash 照片，适用 **Unsplash License**，不适用代码的 MIT 许可。逐张署名、原始链接和处理方式见 [壁纸说明](docs/WALLPAPERS.md)，许可通知也随 APK 打包。
+上游 v0.1.1 起内置五张 Unsplash 照片；本分支本地候选新增两张经原页核对的照片，合计七张，适用 **Unsplash License**，不适用代码的 MIT 许可。逐张署名、原始链接和处理方式见 [壁纸说明](docs/WALLPAPERS.md)，许可通知也随 APK 打包。
 
 用户自行加入的照片不因放入本工程而自动获得 MIT 许可。其他未授权公开的私人试用素材、实机诊断数据、签名密钥均不在公开源代码或官方 APK 中。
 

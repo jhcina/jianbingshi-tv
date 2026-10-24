@@ -1,13 +1,88 @@
 [
   {
+    "id": "yi-photo-courtyard",
+    "name": "青枫庭院",
+    "file": "public-defaults/courtyard.jpg",
+    "thumb": "public-defaults/courtyard_thumb.jpg",
+    "photographer": "乙",
+    "source": "author-provided",
+    "processing": "non-generative tone and texture; 16:9 crop",
+    "license": "乙摄影作品随煎饼使TV使用许可（2026-10-24）",
+    "license_file": "public-defaults/NOTICE.md",
+    "width": 1920,
+    "height": 1080,
+    "sha256": "f39ef6b3f271291e0000e532e9959d3891017d1078f21963c9b5ee482d8e2299",
+    "thumb_sha256": "cda2e624380df6d28627f10dbba04ccdd777b1b151a7eff90630c62e8cae4947"
+  },
+  {
+    "id": "yi-photo-night-taxi",
+    "name": "夜街出租车",
+    "file": "public-defaults/night-taxi.jpg",
+    "thumb": "public-defaults/night-taxi_thumb.jpg",
+    "photographer": "乙",
+    "source": "author-provided",
+    "processing": "non-generative tone and texture; 16:9 crop",
+    "license": "乙摄影作品随煎饼使TV使用许可（2026-10-24）",
+    "license_file": "public-defaults/NOTICE.md",
+    "width": 1920,
+    "height": 1080,
+    "sha256": "f004f1957dba01aaf9ff17fcbdd5fe4615e7978bd1721ca965202f485f0a17fd",
+    "thumb_sha256": "0d0dd7882a47def20ff3cca78a8429132b3be1ac26b6629dd89b2889a93a4fb5"
+  },
+  {
+    "id": "yi-photo-night-rail",
+    "name": "都市夜轨",
+    "file": "public-defaults/night-rail.jpg",
+    "thumb": "public-defaults/night-rail_thumb.jpg",
+    "photographer": "乙",
+    "source": "author-provided",
+    "processing": "non-generative tone and texture; 16:9 crop",
+    "license": "乙摄影作品随煎饼使TV使用许可（2026-10-24）",
+    "license_file": "public-defaults/NOTICE.md",
+    "width": 1920,
+    "height": 1080,
+    "sha256": "5b123c6ad5cbc4f8570782c151f5d5f984f42f15e34199123907ccbbddb61dd7",
+    "thumb_sha256": "3873fcd65047c281c10db5520f1fa5fe320e4eee590a012ac30fe72ee8ca2ef3"
+  },
+  {
+    "id": "yi-photo-blue-crossing",
+    "name": "蓝调道口",
+    "file": "public-defaults/blue-crossing.jpg",
+    "thumb": "public-defaults/blue-crossing_thumb.jpg",
+    "photographer": "乙",
+    "source": "author-provided",
+    "processing": "non-generative tone and texture; 16:9 crop",
+    "license": "乙摄影作品随煎饼使TV使用许可（2026-10-24）",
+    "license_file": "public-defaults/NOTICE.md",
+    "width": 1920,
+    "height": 1080,
+    "sha256": "f9dba9545acf99052a7198f8cdb9aaa7d36e98181d132f301655420ea34c94e3",
+    "thumb_sha256": "330903a1b606a0c652f73a0ef2ab028c489cce34b01442ded3ed2caddd10b940"
+  },
+  {
+    "id": "yi-photo-rail-street",
+    "name": "街角轨道",
+    "file": "public-defaults/rail-street.jpg",
+    "thumb": "public-defaults/rail-street_thumb.jpg",
+    "photographer": "乙",
+    "source": "author-provided",
+    "processing": "non-generative tone and texture; 16:9 crop",
+    "license": "乙摄影作品随煎饼使TV使用许可（2026-10-24）",
+    "license_file": "public-defaults/NOTICE.md",
+    "width": 1920,
+    "height": 1080,
+    "sha256": "875f8ba1c0147927e94049a9b6ae9541ea8a938f8a6f011d42715696f217fbed",
+    "thumb_sha256": "f399f5ee4f0379852f0790df2f6c5c30c1b081a708020941088970962f8471db"
+  },
+  {
     "id": "yi-landscape-01",
     "name": "蓝调海湾",
     "file": "public-defaults/landscape_01.jpg",
     "thumb": "public-defaults/landscape_01_thumb.jpg",
     "source": "user-provided",
     "processing": "non-generative",
-    "photographer": "煎饼使",
-    "license": "煎饼使TV壁纸随项目分发许可",
+    "photographer": "乙",
+    "license": "乙摄影作品随煎饼使TV使用许可（2026-10-24）",
     "license_file": "public-defaults/NOTICE.md",
     "sha256": "fdd0a522820ac77a22c0b1cc20ef3d5b9dc3caea1d260a894f6a29309da10053",
     "thumb_sha256": "325a98d58d6006146a0d68e1eb85f33a9a3d5a1d7ee844e9935db388268a23e3"
@@ -19,8 +94,8 @@
     "thumb": "public-defaults/landscape_02_thumb.jpg",
     "source": "user-provided",
     "processing": "non-generative",
-    "photographer": "煎饼使",
-    "license": "煎饼使TV壁纸随项目分发许可",
+    "photographer": "乙",
+    "license": "乙摄影作品随煎饼使TV使用许可（2026-10-24）",
     "license_file": "public-defaults/NOTICE.md",
     "sha256": "cca34f3bbf03f6e6ede81071643fa646cbd0e7f8f12dee07780a534ca377ccc8",
     "thumb_sha256": "96fa13f26008a0e9b68e80eea1d2e93bde00a0a83c6ee5b7d3db0e5d0454cec3"
@@ -32,8 +107,8 @@
     "thumb": "public-defaults/landscape_03_thumb.jpg",
     "source": "user-provided",
     "processing": "non-generative",
-    "photographer": "煎饼使",
-    "license": "煎饼使TV壁纸随项目分发许可",
+    "photographer": "乙",
+    "license": "乙摄影作品随煎饼使TV使用许可（2026-10-24）",
     "license_file": "public-defaults/NOTICE.md",
     "sha256": "5e83c7a56382c6173329eadab7619f7631e58654174ebf1be6daae1157db88f1",
     "thumb_sha256": "ae84b50142e241f40a15cf18d7aba32e55ae1d04ae35017daa4b5a211fe4e4be"
@@ -117,5 +192,53 @@
     "height": 1280,
     "sha256": "253820318f2d19e9a5f53b0d3a9e83d253d321a3f4349ab5e911c8bbd4c4e95e",
     "thumb_sha256": "df9c09de88d6454446429ea6d04e134d1b486ad2aa644d0138baab38f35cbebe"
+  },
+  {
+    "id": "unsplash-3KmSaZR4fro",
+    "name": "雾湖静晨",
+    "photographer": "Valentin Blary",
+    "source_url": "https://unsplash.com/photos/misty-lake-with-bare-trees-and-reflections-3KmSaZR4fro",
+    "license": "Unsplash License",
+    "license_url": "https://unsplash.com/license",
+    "verified_on": "2026-10-24",
+    "source_size": [
+      4096,
+      2731
+    ],
+    "processing": "non-generative 16:9 crop; no scene edits",
+    "file": "bundled/3KmSaZR4fro.jpg",
+    "thumb": "bundled/3KmSaZR4fro-thumb.jpg",
+    "width": 1920,
+    "height": 1080,
+    "sha256": "3cab2a5c21a7a8ceaac92e5577a679357d166a9b0b8a4ce6f4904abc090faad6",
+    "thumb_sha256": "c32de28c40affdce6e13e1c2f591203b49bee61105a05765d36062ba391dd608",
+    "crop_center": [
+      0.5,
+      0.58
+    ]
+  },
+  {
+    "id": "unsplash-cczug9CpFpU",
+    "name": "暮色沙丘",
+    "photographer": "Alexander Psiuk",
+    "source_url": "https://unsplash.com/photos/desert-dunes-stretch-toward-a-serene-clear-sky-cczug9CpFpU",
+    "license": "Unsplash License",
+    "license_url": "https://unsplash.com/license",
+    "verified_on": "2026-10-24",
+    "source_size": [
+      2667,
+      4000
+    ],
+    "processing": "non-generative 16:9 crop; no scene edits",
+    "file": "bundled/cczug9CpFpU.jpg",
+    "thumb": "bundled/cczug9CpFpU-thumb.jpg",
+    "width": 1920,
+    "height": 1080,
+    "sha256": "aeb1fd8fbaec931fec7a969aa99e1954d479bdf494c42abe7cd7004749febc73",
+    "thumb_sha256": "5cdbc8e038d3de673cca58f857c79244dbc3050f9455e227a44393149b10ea9a",
+    "crop_center": [
+      0.5,
+      0.6
+    ]
   }
 ]

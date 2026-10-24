@@ -1,8 +1,23 @@
-> 本文保留归藏上游说明。煎饼使TV 分支的公开包名是 `io.github.jhcina.yitv`，版本、照片导入和实测范围以 [分支 README](../README.md)、[照片指南](PHOTOS.md)、[兼容记录](YI-COMPATIBILITY.md) 为准。下文上游包名、下载地址及其验证记录不能直接当作本分支结果；不要照抄上游包名设置开机或 Home。
-
 # 内置壁纸与许可
 
-仅打包用户在 2026-10-20 截图中选中的五张 Unsplash 照片。逐张原页面已核对作者与「Free to use under the Unsplash License」标记；没有包含其余 Wallhaven 图片。
+当前本地 preview.4 候选共 15 张：八张乙的原创摄影、七张 Unsplash 图片。默认图库第一张为“青枫庭院”；已有用户的壁纸选择与轮播偏好保留。两张新增婚纱照仅在本人电视的“我的壁纸”，不进入公开资产。
+
+乙的摄影作品适用 [限定使用声明](../app/src/main/assets/wallpapers/public-defaults/NOTICE.md)，允许在本项目及保留声明的衍生版本中用作壁纸并随项目分发，不授予独立素材、图库或无关广告用途。代码 MIT 与照片授权分开；许可不能技术上阻止别人提取文件。
+
+| 摄影 | 名称 | 处理与来源 |
+| --- | --- | --- |
+| 乙 | 蓝调海湾、晨光海岸、山海弯道 | 先前作者本人授权的三张航拍，署名按本人要求更新为乙 |
+| 乙 | 青枫庭院、夜街出租车、都市夜轨、蓝调道口、街角轨道 | 本次作者原片，非生成式明暗、色彩、色噪与轻量细节调整，电视版 16:9 裁切 |
+| Valentin Blary | 雾湖静晨 | [来源与许可](https://unsplash.com/photos/misty-lake-with-bare-trees-and-reflections-3KmSaZR4fro)，原下载副本 4096×2731 |
+| Alexander Psiuk | 暮色沙丘 | [来源与许可](https://unsplash.com/photos/desert-dunes-stretch-toward-a-serene-clear-sky-cczug9CpFpU)，原下载副本 2667×4000，选取水平沙丘区域，不合成扩图 |
+
+本轮新增显示副本为 1920×1080、sRGB，不携带 GPS/EXIF。乙的七张本次照片另交付原尺寸精修母版及 3840×2160 电视版；低分辨率海报的 4K 版本只是排版输出，不表示恢复了原本不存在的细节。竖幅人物完整保留于右侧，左侧暗色留白供桌面文字使用。原图不覆盖，人物、文字、建筑不重绘。
+
+完整文件、摄影师、来源、许可及 SHA-256 见 [catalog.json](../app/src/main/assets/wallpapers/catalog.json)，原图不随项目分发。公开发布仍以 Releases 实际 APK 为准，本次尚未更新公开发行。
+
+## 既有五张 Unsplash 图片与核查历史
+
+既有五张来自用户在 2026-10-20 截图中选中的 Unsplash 照片。逐张原页面已核对作者与「Free to use under the Unsplash License」标记；没有包含其余 Wallhaven 图片。
 
 图片遵循 [Unsplash License](https://unsplash.com/license)，不属于项目代码的 MIT 授权。可免费复制、修改及分发用于本桌面；不得将未作显著修改的照片单独出售，或汇编成与 Unsplash 相似或竞争的服务。
 
@@ -23,7 +38,7 @@
 
 ## 分支补充：许可复核与电视候选（2026-10-24）
 
-默认图库实际为三张煎饼使原创航拍和上述五张 Unsplash 图片。原创照片按 public-defaults/NOTICE.md 的限定随项目分发授权，不是赠送版权；人物和私人照片不随公开项目分发。归藏代码的 MIT 许可不覆盖外部摄影作品，不能据此复制归藏的任意壁纸。
+本轮扩充之前，默认图库为三张乙原创航拍和上述五张 Unsplash 图片。原创照片按 public-defaults/NOTICE.md 的限定随项目分发授权，不是赠送版权；人物和私人照片不随公开项目分发。归藏代码的 MIT 许可不覆盖外部摄影作品，不能据此复制归藏的任意壁纸。
 
 本次重新读取 Unsplash 官方 License，允许免费复制、修改、分发及商业使用；禁止原样出售图片，以及汇编为同类或竞争服务。本桌面少量附带背景与建立图库下载站是不同用途，后者应重新评估。照片授权不等于人物肖像、商标等其他权利自动获准，优先选无人、无商标自然风景。
 
@@ -42,3 +57,5 @@
 可用 CC0 备选库：[StockSnap](https://stocksnap.io/license)。Poly Haven 的素材确为 CC0，但多数为 360° HDRI，须正确投影和色调映射，不能当普通横屏照片直接铺满。此次两张 Pixnio 沙丘的页面写 CC0，许可链接实际转向旧 Public Domain Certification，未纳入可打包清单。
 
 电视筛选标准：先保证文字与焦点好认，再追求画面丰富；优先横向、少亮斑、两侧有安静区域。原图足够时只做保真处理，不能把放大尺寸当成真实细节增加。纯浅色主题用深色主体，深色/照片主题用黄色主体及已有背景遮罩；照片不做像素级自动反色。
+
+2026-10-24 候选落实：雾湖与沙丘已按原页 Unsplash License 核查、下载、裁切并查看。海面俯拍纹理与亮斑过于繁忙，此次不打包。上方历史“尚未打包”描述仅指当时研究阶段，当前清单以本页首段和 catalog.json 为准。

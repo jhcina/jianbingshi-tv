@@ -71,3 +71,8 @@ GitHub 干净环境检查已通过，代码提交 41112ca，运行：https://git
 
 
 详见 [变更记录](changes/2026-10-24-yellow-black-recovery.md) 与 [恢复说明](STANDBY-RECOVERY.md)。
+
+
+## 摄影壁纸更新验收
+
+默认图库 15 张、私人图库 8 个入口已在同一 MFTR0 固件加载；青枫庭院确认应用，新增外部及私人照片预览已查看。原来每分钟轮播保留，14 个既有私人图像载荷逐个摘要未变。Home 三轮通过。仅照片资源更新，无新的重启/长期待机结论。详见 [摄影交付记录](changes/2026-10-24-yi-photography-wallpapers.md)。

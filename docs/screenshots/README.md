@@ -2,7 +2,7 @@
 
 2026-10-22，Xiaomi MiTV-MFTR0 / Android 14 / OS3.0.101.0.UFTMATV，煎饼使TV 0.5.0 预览版。图为 ADB 读取的实际屏幕，不是效果图或客厅现场实拍。
 
-home.png：首页，摄影署名煎饼使。
+home.png：首页，摄影署名乙。
 photo-mode.png：同一壁纸进入看照片模式，文字与时钟隐藏。
 settings.png：分组设置及黄色纸片焦点。
 
