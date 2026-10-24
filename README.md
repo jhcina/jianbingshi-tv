@@ -1,6 +1,6 @@
 # 煎饼使TV
 
-> 本地候选分支：preview.4 私人包已在 MFTR0 安装，横向 Dock 与可选图标已做实机查看，会话内 Home 检查通过；重启自动进入与待机持续性仍未验收。公开下载仍为 preview.3，不含本地可选图标包。见 [启动指南](docs/STARTUP.md) 与 [第三方整合说明](docs/APP-INTEGRATION.md)。
+> 本地 preview.4 候选已在 MFTR0 安装：黄黑主体图标、对齐与可选待机恢复已做阶段检查，三次短时关屏唤醒通过；完整重启、长期待机仍待验收。公开下载仍为 preview.3。见 [待机恢复](docs/STANDBY-RECOVERY.md)、[复用评估](docs/OPEN-SOURCE-REUSE.md) 与 [壁纸许可](docs/WALLPAPERS.md)。
 
 把电视首页留给常用应用和自己的照片。以 [op7418/guizang-tv](https://github.com/op7418/guizang-tv) 为底座的家庭照片桌面分支，保留归藏的大字、壁纸预览和遥控器交互，新增本机相册与看照片模式。
 

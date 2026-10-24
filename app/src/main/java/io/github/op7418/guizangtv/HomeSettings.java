@@ -114,7 +114,7 @@ final class HomeSettings {
             case "appearance":
                 entry("布局与图标","列表或 Dock · 应用与操作显示",()->go("layout"));
                 entry("文字与字号","字体风格与首页字号",()->go("type"));
-                entry("焦点与质感","高亮、磨砂与未选中项淡化",()->go("focus"));break;
+                entry("焦点与质感","高亮、磨砂与未选中文字淡化",()->go("focus"));break;
             case "more":
                 entry("时间与天气","城市、温度与天气显示",()->go("weather"));
                 entry("实验性功能","Codex 对话 · 默认关闭",()->go("experiments"));break;
@@ -130,7 +130,7 @@ final class HomeSettings {
             case "focus":
                 row("焦点表现","focus",new String[]{"文字高亮","毛玻璃"});
                 if(a.appearance.get("focus")==1)row("底板质感","material",new String[]{"柔和","浓雾","清透"});else note("启用毛玻璃后可调整质感。");
-                row("未选中项淡化","dim",new String[]{"轻","标准","明显"});break;
+                row("未选中文字淡化","dim",new String[]{"轻","标准","明显"});break;
             case "rotation":
                 option("固定壁纸",!a.wallpapers.rotating(),()->{if(a.wallpapers.rotation(false,a.wallpapers.minutes()))render();else failed();});
                 for(int m:WallpaperCycle.MINUTES){final int value=m;option("每 "+m+" 分钟",a.wallpapers.rotating()&&a.wallpapers.minutes()==m,()->{
@@ -174,6 +174,7 @@ final class HomeSettings {
                 if(XiaomiProfile.mftr0(android.os.Build.MODEL,android.os.Build.VERSION.INCREMENTAL))
                     entry("主页键返回",HomeReturnService.enabled(a)?"当前已启用可选返回服务":"指定小米固件的可选辅助功能",()->HomeReturnService.openSettings(a));
                 else note("本机优先使用系统默认桌面；当前没有额外主页键返回适配。");
+                if(StandbyRecovery.supported())entry("待机后恢复（实验）",StandbyRecovery.enabled(a)?"已开启；仅在系统重新绑定时恢复主页服务":"默认关闭；需要额外本人授权",()->StandbyRecovery.show(a));
                 entry("重新检查状态","读取实际配置，不自动修改系统权限",this::render);
                 note(StartupSetup.anotherEdition(a)?"检测到另一份煎饼使TV：公开版与私人试用版各存各的数据。先保留原片，再决定保留哪份。":"当前未检测到另一个版本。重复快捷图标不等于安装了两份；可在电视系统应用管理中核对。");
                 note("小米若显示需要电脑配置：请查看仓库「第一次使用 → 启动指南」。开机目标与应用内开关都完成后，再重启验证。");break;

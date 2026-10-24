@@ -48,8 +48,13 @@ public final class BootStart {
         if (boot < 0) return;
         intent.removeExtra(EXTRA);
         if (boot == bootCount(activity) && prefs(activity).getInt("attempted", -1) == boot && enabled(activity)) {
+            prefs(activity).edit().putInt("confirmed", boot).apply();
             status(activity, "已在本次开机后进入桌面");
         }
+    }
+    static String evidenceSummary(Context c) {
+        return BootStartPolicy.evidenceSummary(bootCount(c), prefs(c).getInt("attempted", -1),
+                prefs(c).getInt("confirmed", -1));
     }
     static void settings(Activity a, Runnable systemSettings) {
         TvPanel.show(a,"设置",null,new String[]{"电视系统设置", "开机自动进入："+(enabled(a)?"已开启":"已关闭")},
@@ -61,7 +66,7 @@ public final class BootStart {
         }
         String state=prefs(a).getString("status","尚未进行完整重启测试");
         TvPanel.show(a,"开机自动进入（实验）",
-                "完整开机后尝试一次，不接管 Home 键，不需要悬浮窗权限。\n系统入口："+(configured(a)?"已配置":"尚未配置，需电脑设置")+"\n上次状态："+state,
+                "完整开机后尝试一次，不接管 Home 键，不需要悬浮窗权限。\n系统入口："+(configured(a)?"已配置":"尚未配置，需电脑设置")+"\n本次证据："+evidenceSummary(a)+"\n最近记录（可能来自此前开机）："+state,
                 new String[]{enabled(a)?"关闭自动进入":"开启自动进入"},i->{
                     boolean value=!enabled(a);prefs(a).edit().putBoolean("enabled",value).apply();
                     Toast.makeText(a,value?(configured(a)?"已开启，下次完整重启时尝试进入":"开关已开启，还需按项目文档配置系统入口"):"已关闭开机自动进入",Toast.LENGTH_LONG).show();
@@ -70,6 +75,8 @@ public final class BootStart {
     static void dump(Context c, java.io.PrintWriter out) {
         out.println("BootStart: enabled=" + enabled(c) + " configured=" + configured(c)
                 + " boot=" + bootCount(c) + " attempted=" + prefs(c).getInt("attempted", -1)
+                + " confirmed=" + prefs(c).getInt("confirmed", -1)
+                + " evidence=" + evidenceSummary(c)
                 + " status=" + prefs(c).getString("status", "none"));
     }
 }

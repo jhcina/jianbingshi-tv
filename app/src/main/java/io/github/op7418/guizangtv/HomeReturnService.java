@@ -14,7 +14,7 @@ public final class HomeReturnService extends AccessibilityService {
     @Override protected void onServiceConnected() { connected=this; }
     static void pause(Context c,boolean paused){c.getSharedPreferences("home-return",0).edit().putBoolean("paused",paused).apply();}
     static boolean enabled(Context c){String value=Settings.Secure.getString(c.getContentResolver(),Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);return value!=null&&value.contains(c.getPackageName()+"/");}
-    static void disable(Context c){if(connected!=null)connected.disableSelf();else openSettings(c);}
+    static void disable(Context c){StandbyRecovery.disable(c);if(connected!=null)connected.disableSelf();else openSettings(c);}
     static void openSettings(Context c){
         try{c.startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));}
         catch(RuntimeException unavailable){android.widget.Toast.makeText(c,"请从电视系统设置打开辅助功能",android.widget.Toast.LENGTH_LONG).show();}

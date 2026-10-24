@@ -78,5 +78,39 @@
     "name": "stop",
     "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/fill/stop-fill.svg",
     "license": "MIT"
+  },
+  {
+    "name": "hard-drives",
+    "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/fill/hard-drives-fill.svg",
+    "license": "MIT"
+  },
+  {
+    "name": "play",
+    "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/fill/play-fill.svg",
+    "license": "MIT"
+  },
+  {
+    "name": "images",
+    "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/fill/images-fill.svg",
+    "license": "MIT"
+  },
+  {
+    "name": "folder-open",
+    "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/fill/folder-open-fill.svg",
+    "license": "MIT"
+  },
+  {
+    "name": "hdmi",
+    "source": "original:app/src/main/assets/icons/hdmi.svg",
+    "author": "煎饼使TV contributors",
+    "license": "MIT",
+    "notes": "Original subject silhouette; optical width 208/256, aligned to images glyph. No decorative frame."
+  },
+  {
+    "name": "cast",
+    "source": "original:app/src/main/assets/icons/cast.svg",
+    "author": "煎饼使TV contributors",
+    "license": "MIT",
+    "notes": "Original subject silhouette; optical width 208/256, aligned to images glyph. No decorative frame."
   }
 ]
