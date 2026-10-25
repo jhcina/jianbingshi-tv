@@ -36,6 +36,6 @@
 main 的可选天气使用 [Open-Meteo](https://open-meteo.com/) 数据（[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)），温度取整、天气码转换为中文及自绘矢量图标；城市搜索由 Open-Meteo / GeoNames 提供，IP 城市由 [IPWhois](https://ipwhois.io/) 提供。托管 API 的使用条款独立于本项目代码许可，详见[天气说明](docs/WEATHER.md)。
 
 
-## 待机恢复实验参考（未发布）
+## 待机恢复实验参考（默认关闭）
 
-参考 [pengchujin/aerial-tv](https://github.com/pengchujin/aerial-tv) 的 MFTR0 设备记录、RevivalListener 与 GuardSetup 的系统重新绑定恢复机制，参考版本 `70c18ff12ae04513f4ce2884c8554971ca8316d7`。按本分支 Java 结构实现默认关闭的最小候选；没有引入其账号同步、屏保、ADB 保持或按键过滤机制。Copyright (c) 2026 pengchujin，MIT 全文保存在 `app/src/main/assets/licenses/AERIAL-MIT.txt` 并随 APK 打包。上游同机型测试不是本分支验收；本分支尚须本人授权及实机验证。
+参考 [pengchujin/aerial-tv](https://github.com/pengchujin/aerial-tv) 的 MFTR0 设备记录、RevivalListener 与 GuardSetup 的系统重新绑定恢复机制，参考版本 `70c18ff12ae04513f4ce2884c8554971ca8316d7`。按本分支 Java 结构实现默认关闭的最小候选；没有引入其账号同步、屏保、ADB 保持或按键过滤机制。Copyright (c) 2026 pengchujin，MIT 全文保存在 `app/src/main/assets/licenses/AERIAL-MIT.txt` 并随 APK 打包。上游同机型测试不是本分支验收；本分支在本人明确授权后有三次短时恢复样本，完整重启、长期待机仍待验收；新设备须本人另行开启。

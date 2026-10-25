@@ -4,7 +4,7 @@
 
 ## 1. 下载哪个文件
 
-[下载 0.5.0-preview.3 安装包（预览版 APK）](https://github.com/jhcina/jianbingshi-tv/releases/download/v0.5.0-preview.3/jianbingshi-tv-0.5.0-preview.3.apk)。这是目前经过实机检查的公开包。
+[下载 0.5.0-preview.4 安装包（预览版 APK）](https://github.com/jhcina/jianbingshi-tv/releases/download/v0.5.0-preview.4/jianbingshi-tv-0.5.0-preview.4.apk)。这是当前推荐的签名预览包；普通桌面、照片与会话内 Home 已做阶段检查，不代表完整开机/待机或跨品牌验收。
 
 文件结尾必须是 `.apk`。`source.zip`、GitHub 的 Source code 是给开发者的源码，不能在电视上安装。没有“最新版正式版”下载按钮，是因为目前还没有稳定版。
 

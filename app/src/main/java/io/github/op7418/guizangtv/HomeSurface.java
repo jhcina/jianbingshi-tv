@@ -92,8 +92,12 @@ final class HomeSurface extends FrameLayout {
         LayoutParams sp=new LayoutParams(dock?-2:dp(180),-2,(dock?Gravity.TOP:Gravity.BOTTOM)|Gravity.END);sp.rightMargin=dp(64);sp.bottomMargin=dp(46);if(dock)sp.topMargin=dp(45);addView(side,sp);
         String[] names={"全部应用","其他信号源","设置","Codex"};String[] ids={"apps","inputs","settings","assistant"};
         for(int i=0;i<(HomeAssistant.enabled(c)?names.length:names.length-1);i++){
-            final int index=i;LinearLayout line=new LinearLayout(c);line.setGravity((dock?Gravity.END:Gravity.START)|Gravity.CENTER_VERTICAL);
-            TextView label=text(names[i],dock?16:18);label.setTypeface(style.typeface());int mode=style.get("controls");
+            final int index=i;int mode=style.get("controls");
+            // Keep icon-only actions anchored to the right, including when focus reveals the label.
+            // Revealed text occupies the space to the left; mixed mode retains its aligned left edge.
+            boolean compactControls=!dock&&mode==1;
+            LinearLayout line=new LinearLayout(c);line.setGravity(((dock||compactControls)?Gravity.END:Gravity.START)|Gravity.CENTER_VERTICAL);
+            TextView label=text(names[i],dock?16:18);label.setTypeface(style.typeface());
             label.setGravity(Gravity.CENTER_VERTICAL);label.setSingleLine(true);
             line.addView(label,new LinearLayout.LayoutParams(dock?-2:0,-1,dock?0:1));
             if(mode!=0){
@@ -101,7 +105,7 @@ final class HomeSurface extends FrameLayout {
                 icon.setImageDrawable(art!=null?art:HomeIcons.get(c,"control:"+ids[i],style.ink()));
                 icon.setTag(true);icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 LinearLayout.LayoutParams ip=new LinearLayout.LayoutParams(dp(32),dp(32));
-                if(dock){ip.leftMargin=dp(12);line.addView(icon,ip);}else{ip.rightMargin=dp(12);line.addView(icon,0,ip);}
+                if(dock||compactControls){ip.leftMargin=dp(12);line.addView(icon,ip);}else{ip.rightMargin=dp(12);line.addView(icon,0,ip);}
             }
             line.setPadding(dp(12),0,dp(12),0);side.addView(line,new LinearLayout.LayoutParams(dock?-2:-1,dp(dock?40:48)));controls.add(line);
             wire(line,()->actions.control(index));line.setContentDescription(names[i]);
